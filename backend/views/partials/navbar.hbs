@@ -54,7 +54,7 @@
     Logged in:
     	Home | Comments | Logout
 	Else:
-		Home | Comments | Login
+		Home | Comments | Login | Register
  -->
 <nav id="navbar">
 	<form action="/" method="GET">
@@ -70,6 +70,9 @@
 	{{else}}
 		<form action="/login" method="GET">
 			<button type="submit">Login</button>
+		</form> |
+		<form action="/register" method="GET">
+			<button type="submit">Register</button>
 		</form>
 	{{/if}}
 </nav>
