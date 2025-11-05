@@ -126,6 +126,7 @@ app.post('/register', (req, res) => {
 
 // Render Comments page
 app.get('/comments', (req, res) => {
+    let user = getUser(req, res);
     res.render('comments', {user, comments});
 });
 
