@@ -12,6 +12,8 @@ const comments = [];
 // Set view engine and views directory
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));
+
+// Set up partials
 hbs.registerPartials(path.join(__dirname, 'views/partials'));
 
 // Middleware to parse form submits
@@ -19,6 +21,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(__dirname + '/public'));
 app.use(cookieParser());
 
+// Initialize user session
 app.use(session({
     secret: 'Ns789ySN&*Ysb7YN*AY&NSNywn7ynd&*YDB*&E',
     resave: false,
@@ -54,21 +57,22 @@ app.get('/', (req, res) => {
     res.render('home', { user: user });
 });
 
-// Login page
+// Render Login page
 app.get('/login', (req, res) => {
     res.render('login');
 });
 
-// Handle login form submission (no session functionality yet)
+// Handle login form submission
 app.post('/login', (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
 
+    // Deny missing fields
     if (!username || !password) {
         return res.send("Username and password required.");
     }
 
-    // Check if user exists and password matches
+    // Check if user exists and password matches, log them in
     if (users[username] && users[username] === password) {
         req.session.isLoggedIn = true;
         req.session.username = username;
@@ -78,24 +82,26 @@ app.post('/login', (req, res) => {
         console.log(`User ${username} logged in at ${req.session.loginTime}`);
         res.redirect('/');
     } else {
-        res.send("Invalid username or password.");
+        return res.send("Invalid username or password.");
     }
 });
 
-// Register page
+// Render Register page
 app.get('/register', (req, res) => {
     res.render('register');
 });
 
-// Handle register form submission (no session functionality yet)
+// Handle register form submission
 app.post('/register', (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
 
+    // Deny empty field
     if (!username || !password) {
         return res.send("Username and password required.");
     }
 
+    // Deny duplicate account
     if (users[username]) {
         return res.send("Username already exists. Please log in instead.");
     }
@@ -113,25 +119,28 @@ app.post('/register', (req, res) => {
     res.redirect('/');
 });
 
-// Register page
+// Render Comments page
 app.get('/comments', (req, res) => {
     res.render('comments', {comments});
 });
 
-// Handle comments (no session functionality yet)
+// Handle new comment
 app.post('/comment', (req, res) => {
     const comment = req.body.comment;
     
+    // If user input comment, add comment to comments
     if(comment)
     {
         comments.push(comment);
         console.log(`Sent comment: ${comment}`)
     }
-    else
+    else // Deny empty field
     {
         return res.send("Can't submit empty comment.");
     }
-    res.render("comments");
+
+    // Reload comments page
+    res.render("comments", {comments});
 });
 
 // Add comment
@@ -141,6 +150,7 @@ app.get('/comment/new', (req, res) => {
 
 // Logout user (no session check yet)
 app.post('/logout', (req, res) => {
+    // Check if user has started a session, if so delete it
     if(req.session)
     {
         req.session.destroy((err) => {
@@ -149,7 +159,9 @@ app.post('/logout', (req, res) => {
             }
         });
     }
-    res.clearCookie('name'); // if you used a cookie named 'username'
+
+    // Clear cookies
+    res.clearCookie('name');
     res.redirect('/');
 });
 

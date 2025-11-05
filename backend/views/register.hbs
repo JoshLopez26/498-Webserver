@@ -7,20 +7,23 @@
 <body>
     <h1>Register</h1>
     
+    <!-- Input field for username and password, submit or go to login -->
     <form method="POST" action="/register">
         <p>
             <label for="register_username">Username:</label><br>
             <input type="text" id="register_username" name="username" required>
         </p>
-        
         <p>
             <label for="password">Password:</label><br>
             <input type="password" id="register_password" name="password" required>
         </p>
-        
         <p>
             <button type="submit">Register</button>
             <a href="/">Cancel</a>
+        </p>
+        <p>
+            Already have an account? 
+            <a href="/login">Log in here</a>
         </p>
     </form>
     

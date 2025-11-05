@@ -50,23 +50,26 @@
   }
 </style>
 
+<!-- 
+    Logged in:
+    	Home | Comments | Logout
+	Else:
+		Home | Comments | Login
+ -->
 <nav id="navbar">
-  <form action="/" method="GET">
-    <button type="submit">Home</button>
-  </form>
-  {{#if user.isLoggedIn}}
-    <form action="/logout" method="POST">
-      <button type="submit">Logout</button>
-    </form> |
-    <form action="/comments" method="GET">
-      <button type="submit">Comments</button>
-    </form>
-  {{else}}
-    <form action="/login" method="GET">
-      <button type="submit">Login</button>
-    </form> |
-    <form action="/comments" method="GET">
-      <button type="submit">Comments</button>
-    </form>
-  {{/if}}
+	<form action="/" method="GET">
+		<button type="submit">Home</button>
+	</form> |
+	<form action="/comments" method="GET">
+		<button type="submit">Comments</button>
+	</form> |
+	{{#if user.isLoggedIn}}
+		<form action="/logout" method="POST">
+			<button type="submit">Logout</button>
+		</form>
+	{{else}}
+		<form action="/login" method="GET">
+			<button type="submit">Login</button>
+		</form>
+	{{/if}}
 </nav>

@@ -6,29 +6,26 @@
 </head>
 <body>
     <h1>Login</h1>
-    
+
+    <!-- Input field for username and password, submit or go to register page -->
     <form method="POST" action="/login">
         <p>
             <label for="username">Username:</label><br>
             <input type="text" id="username" name="username" required>
         </p>
-        
         <p>
             <label for="password">Password:</label><br>
             <input type="password" id="password" name="password" required>
         </p>
-        
         <p>
             <button type="submit">Login</button>
             <a href="/">Cancel</a>
         </p>
-
         <p>
             Don't have an account? 
             <a href="/register">Sign up here</a>
         </p>
     </form>
-    
 </body>
 </html>
 
