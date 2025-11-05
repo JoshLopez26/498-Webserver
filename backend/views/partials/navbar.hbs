@@ -1,53 +1,64 @@
 <style>
-  nav {
-    background: linear-gradient(90deg, #0078d7, #00a6ff);
-    padding: 1rem 2rem;
-    border-radius: 0.5rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 2rem;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  }
+	nav {
+		background: linear-gradient(90deg, #0078d7, #00a6ff);
+		padding: 1rem 2rem;
+		border-radius: 0.5rem;
+		display: flex;
+		justify-content: space-between; /* separates left and right sides */
+		align-items: center;
+		font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	}
 
-  nav a,
-  nav button {
-    color: #ffffff;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 1.1rem;
-    position: relative;
-    background: none;
-    border: none;
-    cursor: pointer;
-    transition: color 0.2s ease;
-  }
+	.nav-left {
+		display: flex;
+		align-items: center;
+		gap: 2rem; /* spacing between links */
+	}
 
-  nav a::after,
-  nav button::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -4px;
-    width: 0%;
-    height: 2px;
-    background: white;
-    transition: width 0.3s ease;
-  }
+	.nav-right {
+		color: #ffffff;
+		font-weight: 500;
+		font-size: 1.1rem;
+	}
 
-  nav a:hover,
-  nav button:hover {
-    color: rgb(15, 238, 227);
-  }
+	nav a,
+	nav button {
+		color: #ffffff;
+		text-decoration: none;
+		font-weight: 500;
+		font-size: 1.1rem;
+		position: relative;
+		background: none;
+		border: none;
+		cursor: pointer;
+		transition: color 0.2s ease;
+	}
 
-  nav a:hover::after,
-  nav button:hover::after {
-    width: 100%;
-  }
+	nav a::after,
+	nav button::after {
+		content: "";
+		position: absolute;
+		left: 0;
+		bottom: -4px;
+		width: 0%;
+		height: 2px;
+		background: white;
+		transition: width 0.3s ease;
+	}
 
-  nav form {
-    display: inline; /* so it lines up with other links */
-  }
+	nav a:hover,
+	nav button:hover {
+		color: rgb(15, 238, 227);
+	}
+
+	nav a:hover::after,
+	nav button:hover::after {
+		width: 100%;
+	}
+
+	nav form {
+		display: inline; /* keeps buttons inline with links */
+	}
 </style>
 
 <!-- 
@@ -56,24 +67,30 @@
 	Else:
 		Home | Comments | Login | Register
  -->
-<nav id="navbar">
-	<form action="/" method="GET">
-		<button type="submit">Home</button>
-	</form> |
-	<form action="/comments" method="GET">
-		<button type="submit">Comments</button>
-	</form> |
-	{{#if user.isLoggedIn}}
-		<form action="/logout" method="POST">
-			<button type="submit">Logout</button>
-		</form>
-		<p>Logged in as: {{user.name}}</p>
-	{{else}}
-		<form action="/login" method="GET">
-			<button type="submit">Login</button>
+<nav>
+	<div>
+		<form action="/" method="GET">
+			<button type="submit">Home</button>
 		</form> |
-		<form action="/register" method="GET">
-			<button type="submit">Register</button>
-		</form>
-	{{/if}}
+		<form action="/comments" method="GET">
+			<button type="submit">Comments</button>
+		</form> |
+		{{#if user.isLoggedIn}}
+			<form action="/logout" method="POST">
+				<button type="submit">Logout</button>
+			</form>			
+		{{else}}
+			<form action="/login" method="GET">
+				<button type="submit">Login</button>
+			</form> |
+			<form action="/register" method="GET">
+				<button type="submit">Register</button>
+			</form>
+		{{/if}}
+	</div>
+	<div>
+		{{#if user.isLoggedIn}}
+			<p>Logged in as: {{user.name}}</p>
+		{{/if}}
+	</div>
 </nav>
