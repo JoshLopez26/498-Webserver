@@ -131,7 +131,12 @@ app.post('/comment', (req, res) => {
     // If user input comment, add comment to comments
     if(comment)
     {
-        comments.push(comment);
+        const commentObj = {
+            author: req.session.username,
+            comment: comment,
+            createdAt: new Date()
+        }
+        comments.push(commentObj);
         console.log(`Sent comment: ${comment}`)
     }
     else // Deny empty field
