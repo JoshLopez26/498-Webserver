@@ -7,9 +7,12 @@
 <body>
     <h1>Home</h1>
     {{> navbar}}
+
+    <!-- Display online status of the user -->
     <h2>Current User Information</h2>
     <p><strong>Name:</strong> {{user.name}}</p>
     <p><strong>Status:</strong> {{#if user.isLoggedIn}}Logged In{{else}}Guest{{/if}}</p>
+    
     {{> footer}}
 </body>
 </html>

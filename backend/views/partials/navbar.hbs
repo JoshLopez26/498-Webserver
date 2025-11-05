@@ -67,6 +67,7 @@
 		<form action="/logout" method="POST">
 			<button type="submit">Logout</button>
 		</form>
+		<p>Logged in as: {{user.name}}</p>
 	{{else}}
 		<form action="/login" method="GET">
 			<button type="submit">Login</button>
