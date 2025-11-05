@@ -35,10 +35,10 @@ app.use(session({
 // Home page - shows static user data
 app.get('/', (req, res) => {
     let user = getUser(req, res);
-
     res.render('home', { user: user });
 });
 
+// Get user data if logged in, set as guest if else
 function getUser(req, res){
     let user = {  // We keep the Guest object to act as a default if there is no session
         name: "Guest",

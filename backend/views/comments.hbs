@@ -23,16 +23,12 @@
     <ul>
         {{#each comments}}
             <li>
-                <strong>
-                    Author: 
-                </strong>
-                <p> {{author}} </p>
-                <strong>
-                    Date:
-                </strong>
-                <p> {{createdAt}} </p>
-                <br> {{comment}}
-            </li>
+                <p>
+                    <strong>{{Author}}</strong><br>
+                    {{comment}}<br>
+                    <em>Posted on: {{createdAt}}</em><br>
+                </p>
+            </li><br>
         {{/each}}
     </ul>
     {{> footer}}
