@@ -4,6 +4,7 @@ body
 	margin: 20px;
 	background-color: #1f1f29;
 	color: #fff;
+	font-size: 12pt;
 }
 
 h1
@@ -24,6 +25,14 @@ a, a:hover, a:after, a:hover::after
 
 .list-indent
 {
-	margin-top: -20px;
+	margin-top: -15px;
 	margin-left: 20px;
+}
+
+.comment-date{
+	color: rgb(203, 203, 226)
+}
+
+.comment-author{
+	font-size: 15pt;
 }
