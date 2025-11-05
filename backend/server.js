@@ -121,7 +121,7 @@ app.post('/register', (req, res) => {
 
 // Render Comments page
 app.get('/comments', (req, res) => {
-    res.render('comments', {comments});
+    res.render('comments', {user: user, comments});
 });
 
 // Handle new comment
@@ -145,7 +145,7 @@ app.post('/comment', (req, res) => {
     }
 
     // Reload comments page
-    res.render("comments", {comments});
+    res.render("comments", {user: user, comments});
 });
 
 // Add comment
