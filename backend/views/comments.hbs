@@ -8,6 +8,21 @@
     <h1>Comments</h1>
     {{> navbar}}
 
+    <!-- Display all comments in an unordered list -->
+    <ul>
+        {{#each comments}}
+            <li>
+                <p>
+                    <strong>{{author}}</strong><br>
+                    <div class="list-indent">
+                        {{comment}}<br>
+                        <em>Posted on: {{createdAt}}</em><br>
+                    </div>
+                </p>
+            </li>
+        {{/each}}
+    </ul>
+
     <!-- If user is logged in, add comment form, else send to login -->
     {{#if user.isLoggedIn}}
         <form action="/comment/new" method="GET">
@@ -18,19 +33,7 @@
             <button type="submit">Add Comment</button>
         </form>
     {{/if}}
-
-    <!-- Display all comments in an unordered list -->
-    <ul>
-        {{#each comments}}
-            <li>
-                <p>
-                    <strong>{{author}}</strong><br>
-                    {{comment}}<br>
-                    <em>Posted on: {{createdAt}}</em><br>
-                </p>
-            </li><br>
-        {{/each}}
-    </ul>
+    <br>
     {{> footer}}
 </body>
 </html>

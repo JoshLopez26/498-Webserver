@@ -21,3 +21,8 @@ a, a:hover, a:after, a:hover::after
 	background-color: #1f1f29;
 	padding: 20px;
 }
+
+.list-indent
+{
+	margin-left: 20px;
+}
