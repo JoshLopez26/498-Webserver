@@ -17,8 +17,7 @@
 
 	.nav-right {
 		color: #ffffff;
-		font-weight: 500;
-		font-size: 1.1rem;
+		font-size: 12pt;
 	}
 
 	nav a,
@@ -68,7 +67,7 @@
 		Home | Comments | Login | Register
  -->
 <nav>
-	<div>
+	<div class="nav-left">
 		<form action="/" method="GET">
 			<button type="submit">Home</button>
 		</form> |
@@ -88,9 +87,9 @@
 			</form>
 		{{/if}}
 	</div>
-	<div>
+	<div class="nav-right">
 		{{#if user.isLoggedIn}}
-			<p>Logged in as: {{user.name}}</p>
+			<strong>{{user.name}}</strong>
 		{{/if}}
 	</div>
 </nav>
