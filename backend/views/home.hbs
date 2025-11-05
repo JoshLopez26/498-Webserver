@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Basic Login Demo</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <h1>Basic Login Demo</h1>
+    {{> navbar}}
+    <h2>Current User Information</h2>
+    <p><strong>Name:</strong> {{user.name}}</p>
+    <p><strong>Status:</strong> {{#if user.isLoggedIn}}Logged In{{else}}Guest{{/if}}</p>
+    <p><strong>Message:</strong> Please login to access your profile.</p>
+    <ul>
+        {{#each comments}}
+            <li>{{this}}</li>
+        {{/each}}
+    </ul>
+    {{> footer}}
+</body>
+</html>

@@ -1,0 +1,23 @@
+body
+{
+	font-family: Arial, sans-serif;
+	margin: 20px;
+	background-color: #1f1f29;
+	color: #fff;
+}
+
+h1
+{
+	color: #fff;
+}
+
+a, a:hover, a:after, a:hover::after 
+{
+	color: #fff;
+}
+
+.container
+{
+	background-color: #1f1f29;
+	padding: 20px;
+}
