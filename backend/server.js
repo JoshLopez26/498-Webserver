@@ -34,12 +34,12 @@ app.use(session({
 
 // Home page - shows static user data
 app.get('/', (req, res) => {
-    let user = getUser();
+    let user = getUser(req, res);
 
     res.render('home', { user: user });
 });
 
-function getUser(){
+function getUser(req, res){
     let user = {  // We keep the Guest object to act as a default if there is no session
         name: "Guest",
         isLoggedIn: false,
@@ -132,7 +132,7 @@ app.get('/comments', (req, res) => {
 // Handle new comment
 app.post('/comment', (req, res) => {
     const comment = req.body.comment;
-    let user = getUser();
+    let user = getUser(req, res);
     
     // If user input comment, add comment to comments
     if(comment)
