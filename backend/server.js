@@ -34,13 +34,19 @@ app.use(session({
 
 // Home page - shows static user data
 app.get('/', (req, res) => {
+    let user = getUser();
+
+    res.render('home', { user: user });
+});
+
+function getUser(){
     let user = {  // We keep the Guest object to act as a default if there is no session
         name: "Guest",
         isLoggedIn: false,
         loginTime: null,
         visitCount: 0
     };
-    
+
     // Check if user is logged in via session
     if (req.session.isLoggedIn) {
         user = {
@@ -53,9 +59,8 @@ app.get('/', (req, res) => {
         // Increment visit count
         req.session.visitCount = (req.session.visitCount || 0) + 1;
     }
-
-    res.render('home', { user: user });
-});
+    return user;
+}
 
 // Render Login page
 app.get('/login', (req, res) => {
@@ -121,12 +126,13 @@ app.post('/register', (req, res) => {
 
 // Render Comments page
 app.get('/comments', (req, res) => {
-    res.render('comments', {user: user, comments});
+    res.render('comments', {user, comments});
 });
 
 // Handle new comment
 app.post('/comment', (req, res) => {
     const comment = req.body.comment;
+    let user = getUser();
     
     // If user input comment, add comment to comments
     if(comment)
@@ -145,7 +151,7 @@ app.post('/comment', (req, res) => {
     }
 
     // Reload comments page
-    res.render("comments", {user: user, comments});
+    res.render("comments", {user, comments});
 });
 
 // Add comment
