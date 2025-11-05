@@ -119,23 +119,24 @@ app.get('/comments', (req, res) => {
 });
 
 // Handle comments (no session functionality yet)
-app.post('/comments', (req, res) => {
+app.post('/comment', (req, res) => {
     const comment = req.body.comment;
     
     if(comment)
     {
         comments.push(comment);
-        return res.send(`Sent comment: ${comment}`)
+        console.log(`Sent comment: ${comment}`)
     }
     else
     {
         return res.send("Can't submit empty comment.");
     }
+    res.render("comments");
 });
 
 // Add comment
-app.get('/addComment', (req, res) => {
-    res.render('addComment');
+app.get('/comment/new', (req, res) => {
+    res.render('comment/new');
 });
 
 // Logout user (no session check yet)

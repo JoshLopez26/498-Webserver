@@ -6,18 +6,14 @@
 </head>
 <body>
     <h1>Comments</h1>
-    
-    <form method="POST" action="/comments">
-        <p>
-            <label for="comment">Comment:</label><br>
-            <input type="text" id="comment" name="comment" required>
-        </p>
-        
-        <p>
-            <button type="submit">Send</button>
-            <a href="/">Cancel</a>
-        </p>
-    </form>
+    <form action="/comment/new" method="GET">
+      <button type="submit">Add Comment</button>
+    </form> |
+    <ul>
+        {{#each comments}}
+            <li>{{this}}</li>
+        {{/each}}
+    </ul>
     
 </body>
 </html>
