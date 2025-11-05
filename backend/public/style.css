@@ -24,5 +24,6 @@ a, a:hover, a:after, a:hover::after
 
 .list-indent
 {
+	margin-top: -20px;
 	margin-left: 20px;
 }
