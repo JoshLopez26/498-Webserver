@@ -7,3 +7,4 @@ Run Instructions:
 - docker compose build
 - docker compose up -d
 - In your browser, open http://159.65.47.11/
+- To close, run docker compose down
