@@ -5,13 +5,17 @@ const path = require('path');
 const hbs = require('hbs');
 const cookieParser = require('cookie-parser');
 
+
 const PORT = process.env.PORT || 3000;
 const users = {};
 const comments = [];
 
+//USING METADATA FILE FORMAT
+
 // Set view engine and views directory
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));
+app.set('modules', path.join(__dirname, 'modules'));
 
 // Set up partials
 hbs.registerPartials(path.join(__dirname, 'views/partials'));
@@ -61,6 +65,7 @@ function getUser(req, res){
     }
     return user;
 }
+
 
 // Render Login page
 app.get('/login', (req, res) => {
