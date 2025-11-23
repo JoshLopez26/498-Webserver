@@ -36,7 +36,7 @@ app.use(session({
     }
 }));
 
-// Mount routes from external router module
+// Handle routes through router module
 const router = require('./modules/router')(users, comments);
 app.use('/', router);
 

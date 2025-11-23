@@ -132,5 +132,14 @@ module.exports = (users, comments) => {
         res.redirect('/');
     });
 
+    // Route to discover-pdf module
+    const pdfRouter = require('./discover-pdf');
+    router.use('/pdfs', pdfRouter);
+
+    // 404 handler (must be last)
+    router.use((req, res) => {
+        res.status(404).send('<h1>404 - Page Not Found</h1>');
+    });
+
     return router;
 };
