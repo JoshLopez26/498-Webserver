@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pdfs</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <h1>Pdfs</h1>
+
+    <ul>
+        {{#each pdfs}}
+            <li>
+                <form action="/pdfs/{{pdfFile}}" method="GET">
+			        <button type="submit">{{title}}</button>
+		        </form>
+                <strong>{{title}}</strong>: {{Description}}
+            </li>
+        {{/each}}
+    </ul>
+
+</body>
+</html>

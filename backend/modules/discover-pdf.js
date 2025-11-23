@@ -1,21 +1,46 @@
+
+
 const express = require('express');
-const path = require('path');
+const validateRouter = require('./validate-pdf');
 
 const router = express.Router();
 
-// PDFs are stored in backend/pdfs (one level up from modules)
-const pdfDir = path.join(__dirname, '..', 'pdfs');
+// GET /pdfs/ - render pdf.hbs with all JSON data from /pdfs
+const fs = require('fs');
+const path = require('path');
 
-// Serve requested PDF by name (e.g. GET /pdfs/pdf1.pdf)
-router.get('/:name.pdf', (req, res) => {
-    const pdfName = req.params.name;
-    const pdfPath = path.join(pdfDir, `${pdfName}.pdf`);
-
-    res.sendFile(pdfPath, err => {
+router.get('/', (req, res) => {
+    const pdfsDir = path.join(__dirname, '..', 'pdfs');
+    fs.readdir(pdfsDir, (err, files) => {
         if (err) {
-            return res.status(404).json({ error: 'PDF not found' });
+            return res.status(500).send('Error reading PDF directory');
         }
+        const jsonFiles = files.filter(f => f.endsWith('.json'));
+        const pdfs = [];
+        let readCount = 0;
+        if (jsonFiles.length === 0) {
+            return res.render('pdf', { pdfs: [] });
+        }
+        jsonFiles.forEach(file => {
+            fs.readFile(path.join(pdfsDir, file), 'utf8', (err, data) => {
+                readCount++;
+                if (!err) {
+                    try {
+                        const obj = JSON.parse(data);
+                        obj.filename = file;
+                        obj.pdfFile = file.replace('.json', '.pdf');
+                        pdfs.push(obj);
+                    } catch {}
+                }
+                if (readCount === jsonFiles.length) {
+                    res.render('pdf', { pdfs });
+                }
+            });
+        });
     });
 });
+
+// Delegate /pdfs/:name.pdf to validate-pdf.js
+router.use('/', validateRouter);
 
 module.exports = router;
