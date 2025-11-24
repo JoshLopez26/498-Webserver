@@ -10,10 +10,11 @@
     <ul>
         {{#each pdfs}}
             <li>
+                <strong>{{title}}</strong>: <br>{{Description}}<br>
                 <form action="/pdfs/{{pdfFile}}" method="GET">
-			        <button type="submit">{{title}}</button>
+			        <button type="submit">View Document</button>
 		        </form>
-                <strong>{{title}}</strong>: {{Description}}
+                <br>
             </li>
         {{/each}}
     </ul>
