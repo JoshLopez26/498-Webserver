@@ -9,3 +9,9 @@ If you wish to read the code:
 The server will remain running, if it is down, let me know
 
 PDF details are stored as JSON files and the names MUST be the same!
+
+All routing is handled through router.js in the modules directory.
+The PDF's page has it's own handler called from router.js called discover-pdf.js.
+When clicking on a PDF link, it gets validated through validate-pdf.js, then opens the link.
+
+Used Squarespace to get domain name and nginx-proxy to integrate HTTPS certificate.
