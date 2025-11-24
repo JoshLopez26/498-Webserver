@@ -39,16 +39,21 @@ a, a:hover, a:after, a:hover::after
 
 /* Reusable themed button (matches navbar appearance) */
 .themed-button {
-	color: #ffffff;
-	text-decoration: none;
-	font-weight: 500;
-	font-size: 1.1rem;
-	background: none;
-	border: none;
-	cursor: pointer;
-	position: relative;
-	padding: 0.25rem 0.5rem;
-}
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    background: linear-gradient(90deg, #0078d7, #00a6ff); /* match navbar */
+    border: none;
+    cursor: pointer;
+    position: relative;
+    padding: 0.35rem 0.8rem; /* smaller button */
+    border-radius: 0.35rem;
+    display: inline-block;
+    line-height: 1;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+    transition: transform 0.08s ease, box-shadow 0.12s ease;
+	}
 
 .themed-button::after {
 	content: "";
@@ -63,6 +68,8 @@ a, a:hover, a:after, a:hover::after
 
 .themed-button:hover {
 	color: rgb(15, 238, 227);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.22);
 }
 
 .themed-button:hover::after {
