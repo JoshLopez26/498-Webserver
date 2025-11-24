@@ -25,12 +25,12 @@
 
     <!-- If user is logged in, add comment form, else send to login -->
     {{#if user.isLoggedIn}}
-        <form action="/comment/new" method="GET">
-            <button type="submit">Add Comment</button>
+        <form class="themed-form" action="/comment/new" method="GET">
+            <button class="themed-button" type="submit">Add Comment</button>
         </form>
     {{else}}
-        <form action="/login" method="GET">
-            <button type="submit">Add Comment</button>
+        <form class="themed-form" action="/login" method="GET">
+            <button class="themed-button" type="submit">Add Comment</button>
         </form>
     {{/if}}
     {{> footer}}
