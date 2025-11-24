@@ -30,7 +30,7 @@ router.get('/', (req, res) => {
     const pdfsDir = path.join(__dirname, '..', 'pdfs');
     fs.readdir(pdfsDir, (err, files) => {
         if (err) {
-            return res.status(500).send('File does not exist');
+            return res.status(500).send('Folder or files do not exist');
         }
 
         // Filter out JSON files
@@ -50,13 +50,15 @@ router.get('/', (req, res) => {
             fs.readFile(path.join(pdfsDir, file), 'utf8', (err, data) => {
                 readCount++;
                 if (!err) {
+                    // Build object from JSON data
                     try {
                         const obj = JSON.parse(data);
-                        obj.filename = file;
-                        obj.pdfFile = file.replace('.json', '.pdf');
+                        obj.jsonName = file;
+                        obj.pdfName = file.replace('.json', '.pdf');
                         pdfs.push(obj);
                     } catch {}
                 }
+                // Render after all files processed
                 if (readCount === jsonFiles.length) {
                     res.render('pdf', { pdfs, user });
                 }

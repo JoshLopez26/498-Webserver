@@ -53,45 +53,12 @@ a, a:hover, a:after, a:hover::after
     line-height: 1;
     box-shadow: 0 2px 6px rgba(0,0,0,0.18);
     transition: transform 0.08s ease, box-shadow 0.12s ease;
-	overflow: hidden; /* contain underline inside the button */
 	}
-
-.themed-button::after {
-	/* disable container underline; we use the label pseudo-element instead */
-	display: none;
-}
-
-/* Attach underline to the text label so it matches the text width */
-.themed-button .label {
-	position: relative;
-	display: inline-block;
-}
-
-.themed-button .label::after {
-	content: "";
-	position: absolute;
-	left: 50%;
-	transform: translateX(-50%);
-	bottom: 4px; /* slightly lower inside the button */
-	width: 0;
-	height: 3px;
-	background: white;
-	border-radius: 2px;
-	transition: width 0.25s ease;
-}
-
-.themed-button:hover .label::after {
-	width: 100%;
-}
 
 .themed-button:hover {
 	color: rgb(15, 238, 227);
 	/* no translate on hover to avoid position shift */
 	box-shadow: 0 4px 10px rgba(0,0,0,0.22);
-}
-
-.themed-button:hover::after {
-	width: 100%;
 }
 
 .themed-form { display: inline; }
