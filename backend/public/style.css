@@ -57,21 +57,37 @@ a, a:hover, a:after, a:hover::after
 	}
 
 .themed-button::after {
+	/* disable container underline; we use the label pseudo-element instead */
+	display: none;
+}
+
+/* Attach underline to the text label so it matches the text width */
+.themed-button .label {
+	position: relative;
+	display: inline-block;
+}
+
+.themed-button .label::after {
 	content: "";
 	position: absolute;
-	left: 0;
-	bottom: 6px; /* place underline inside the button box */
-	width: 0%;
+	left: 50%;
+	transform: translateX(-50%);
+	bottom: 4px; /* slightly lower inside the button */
+	width: 0;
 	height: 3px;
 	background: white;
 	border-radius: 2px;
-	transition: width 0.3s ease;
+	transition: width 0.25s ease;
+}
+
+.themed-button:hover .label::after {
+	width: 100%;
 }
 
 .themed-button:hover {
 	color: rgb(15, 238, 227);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.22);
+	/* no translate on hover to avoid position shift */
+	box-shadow: 0 4px 10px rgba(0,0,0,0.22);
 }
 
 .themed-button:hover::after {
