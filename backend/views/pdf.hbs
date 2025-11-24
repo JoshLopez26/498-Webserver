@@ -1,23 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Pdfs</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Documents</title>
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-    <h1>Pdfs</h1>
+    {{> navbar}}
+    <main>
+        <h1>Documents</h1>
 
-    <ul>
-        {{#each pdfs}}
-            <li>
-                <strong>{{title}}</strong>: <br>{{Description}}<br>
-                <form action="/pdfs/{{pdfFile}}" method="GET">
-			        <button type="submit">View Document</button>
-		        </form>
-                <br>
-            </li>
-        {{/each}}
-    </ul>
+        <ul>
+            {{#each pdfs}}
+                <li>
+                    <strong>{{title}} ({{filename}})</strong><br>
+                    {{Description}}<br>
+                    <form class="themed-form" action="/pdfs/{{pdfFile}}" method="GET">
+                        <button class="themed-button" type="submit">View Document</button>
+                    </form>
+                </li>
+            {{/each}}
+        </ul>
+    </main>
 
+    {{> footer}}
 </body>
 </html>

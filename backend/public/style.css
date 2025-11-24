@@ -36,3 +36,37 @@ a, a:hover, a:after, a:hover::after
 .comment-author{
 	font-size: 15pt;
 }
+
+/* Reusable themed button (matches navbar appearance) */
+.themed-button {
+	color: #ffffff;
+	text-decoration: none;
+	font-weight: 500;
+	font-size: 1.1rem;
+	background: none;
+	border: none;
+	cursor: pointer;
+	position: relative;
+	padding: 0.25rem 0.5rem;
+}
+
+.themed-button::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	bottom: -4px;
+	width: 0%;
+	height: 2px;
+	background: white;
+	transition: width 0.3s ease;
+}
+
+.themed-button:hover {
+	color: rgb(15, 238, 227);
+}
+
+.themed-button:hover::after {
+	width: 100%;
+}
+
+.themed-form { display: inline; }
