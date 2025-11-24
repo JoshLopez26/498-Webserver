@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3000;
 const users = {};
 const comments = [];
 
-//USING METADATA FILE FORMAT
+//USING METADATA FILE FORMAT (JSON) FOR PDF DETAILS
 
 // Set view engine and views directory
 app.set('view engine', 'hbs');
