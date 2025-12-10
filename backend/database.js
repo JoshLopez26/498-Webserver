@@ -19,14 +19,6 @@ db.exec(`
         last_login DATETIME
     );
 
-    CREATE TABLE IF NOT EXISTS sessions (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        userId INTEGER NOT NULL,
-        expiresAt DATETIME NOT NULL,
-        createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (userId) REFERENCES users(id)
-    );
-
     CREATE TABLE IF NOT EXISTS comments (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         userId INTEGER NOT NULL,
