@@ -31,6 +31,23 @@ module.exports = (users, comments) => {
         res.render('home', { user: user });
     });
 
+    router.get('/test-session', (req, res) => {
+        req.session.testData = 'Session is working!';
+        req.session.timestamp = new Date().toISOString();
+        res.json({
+            message: 'Session stored',
+            session: req.session
+        });
+    });
+
+    router.get('/check-session', (req, res) => {
+        res.json({
+            sessionExists: !!req.session.testData,
+            data: req.session.testData,
+            timestamp: req.session.timestamp
+        });
+    });
+
     // Render Login page (POST requests handled by /api/auth)
     router.get('/login', (req, res) => {
         res.render('login');
