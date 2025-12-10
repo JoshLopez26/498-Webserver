@@ -41,11 +41,13 @@ module.exports = (users, comments) => {
         const username = req.body.username;
         const password = req.body.password;
 
-        if (!username || !password) {
+        if (!username || !password) 
+        {
             return res.send("Username and password required.");
         }
 
-        if (users[username] && users[username] === password) {
+        if (users[username] && users[username] === password)
+        {
             req.session.isLoggedIn = true;
             req.session.username = username;
             req.session.loginTime = new Date().toISOString();
@@ -53,7 +55,9 @@ module.exports = (users, comments) => {
 
             console.log(`User ${username} logged in at ${req.session.loginTime}`);
             return res.redirect('/');
-        } else {
+        }
+        else
+        {
             return res.send("Invalid username or password.");
         }
     });
@@ -62,6 +66,20 @@ module.exports = (users, comments) => {
     router.get('/register', (req, res) => {
         res.render('register');
     });
+
+    /*
+    router.post('/register', async (req, res) => {
+        try 
+        {
+            const hash = await hashPassword(req.body.password);
+            await saveUser(req.body.username, hash);
+            res.send('User registered');
+        } 
+        catch (error) 
+        {
+            res.status(500).send('Registration failed');
+        }
+    });*/
 
     // Handle register form submission
     router.post('/register', (req, res) => {
