@@ -55,6 +55,7 @@ async function hashPassword(password) {
 
 
 // Compares a plain text password with a hashed password
+
 async function comparePassword(password, hash) {
   return await argon2.verify(hash, password);
 }
