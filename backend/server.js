@@ -1,12 +1,12 @@
 const express = require('express');
 const session = require('express-session');
-const SQLiteStore = require('./sqlite-session-store');
+const SQLiteStore = require('./modules/sqlite-session-store');
 const app = express();
 const path = require('path');
 const hbs = require('hbs');
 const cookieParser = require('cookie-parser');
 //const db = require('./database');
-const authRoutes = require('./routes/auth');
+const authRoutes = require('./modules/auth');
 const { requireAuth } = require('./modules/auth-middleware');
 
 
