@@ -1,25 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
     <title>Bogobit</title>
     <link rel="stylesheet" href="/style.css">
     <link rel="icon" href="/images/favicon.png" type="image/x-icon">
 </head>
 <body>
     <h1>Register</h1>
-    <div>
-        <strong>Password Requirements:</strong>
-        <ul>
-            <li>At least 8 characters long</li>
-            <li>At least one uppercase letter</li>
-            <li>At least one lowercase letter</li>
-            <li>At least one number</li>
-            <li>At least one special character</li>
-        </ul>
-    </div>
+    
     <!-- Input field for username and password, submit or go to login -->
-    <form method="POST" action="/api/auth/register">
+    <form method="POST" action="/register">
         <p>
             <label for="register_username">Username:</label><br>
             <input type="text" id="register_username" name="username" required>
@@ -34,7 +24,7 @@
         </p>
         <p>
             Already have an account? 
-            <a href="/api/auth/login">Log in here</a>
+            <a href="/login">Log in here</a>
         </p>
     </form>
     

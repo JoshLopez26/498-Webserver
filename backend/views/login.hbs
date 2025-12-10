@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
     <title>Bogobit</title>
     <link rel="stylesheet" href="/style.css">
     <link rel="icon" href="/images/favicon.png" type="image/x-icon">
@@ -10,7 +9,7 @@
     <h1>Login</h1>
 
     <!-- Input field for username and password, submit or go to register page -->
-    <form method="POST" action="/api/auth/login">
+    <form method="POST" action="/login">
         <p>
             <label for="username">Username:</label><br>
             <input type="text" id="username" name="username" required>
@@ -25,7 +24,7 @@
         </p>
         <p>
             Don't have an account? 
-            <a href="/api/auth/register">Sign up here</a>
+            <a href="/register">Sign up here</a>
         </p>
     </form>
 </body>
