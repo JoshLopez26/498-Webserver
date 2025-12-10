@@ -31,14 +31,78 @@ module.exports = (users, comments) => {
         res.render('home', { user: user });
     });
 
-    // Render Login page (POST requests handled by /api/auth)
+    // Render Login page
     router.get('/login', (req, res) => {
         res.render('login');
+    });
+
+    // Handle login form submission
+    router.post('/login', (req, res) => {
+        const username = req.body.username;
+        const password = req.body.password;
+
+        if (!username || !password) 
+        {
+            return res.send("Username and password required.");
+        }
+
+        if (users[username] && users[username] === password)
+        {
+            req.session.isLoggedIn = true;
+            req.session.username = username;
+            req.session.loginTime = new Date().toISOString();
+            req.session.visitCount = 0;
+
+            console.log(`User ${username} logged in at ${req.session.loginTime}`);
+            return res.redirect('/');
+        }
+        else
+        {
+            return res.send("Invalid username or password.");
+        }
     });
 
     // Render Register page
     router.get('/register', (req, res) => {
         res.render('register');
+    });
+
+    /*
+    router.post('/register', async (req, res) => {
+        try 
+        {
+            const hash = await hashPassword(req.body.password);
+            await saveUser(req.body.username, hash);
+            res.send('User registered');
+        } 
+        catch (error) 
+        {
+            res.status(500).send('Registration failed');
+        }
+    });*/
+
+    // Handle register form submission
+    router.post('/register', (req, res) => {
+        const username = req.body.username;
+        const password = req.body.password;
+
+        if (!username || !password) {
+            return res.send("Username and password required.");
+        }
+
+        if (users[username]) {
+            return res.send("Username already exists. Please log in instead.");
+        }
+
+        users[username] = password;
+        console.log(`Registered new user: ${username}`);
+
+        req.session.isLoggedIn = true;
+        req.session.username = username;
+        req.session.loginTime = new Date().toISOString();
+        req.session.visitCount = 0;
+
+        res.redirect('/');
     });
 
     // Render Comments page
