@@ -136,6 +136,10 @@ module.exports = (users, comments) => {
     const pdfRouter = require('./discover-pdf');
     router.use('/pdfs', pdfRouter);
 
+    // Route to data testing module
+    const testDb = require('./test-database');
+    router.use('/test-database', testDb);
+
     // 404 handler (must be last)
     router.use((req, res) => {
         res.status(404).send('<h1>404 - Page Not Found</h1>');
