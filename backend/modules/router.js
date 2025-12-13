@@ -149,10 +149,11 @@ module.exports = (users, comments) => {
     router.get('/comments', (req, res) => {
         let user = getUser(req);
         if(req.session && req.session.isLoggedIn){
-            db.prepare('SELECT comments.text, comments.created_at, users.display_name FROM comments JOIN users ON comments.user_id = users.id ORDER BY comments.created_at DESC')
+            const comments = db.prepare('SELECT comments.text, comments.created_at, users.display_name FROM comments JOIN users ON comments.user_id = users.id ORDER BY comments.created_at DESC')
             .all();
+            res.render('comments', {user, comments});
         }
-        res.render('comments', {user, comments});
+        
     });
 
     // Handle new comment
