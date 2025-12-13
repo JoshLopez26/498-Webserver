@@ -132,7 +132,7 @@ module.exports = (users, comments) => {
             const passwordHash = await hashPassword(password);
             
             // Insert new user into database
-            const stmt = db.prepare('INSERT INTO users (name, password, email, display_name) VALUES (?, ?, ?)');
+            const stmt = db.prepare('INSERT INTO users (name, password, email, display_name) VALUES (?, ?, ?, ?)');
             const result = stmt.run(username, passwordHash, email, display);
             
             // Redirect to success page with username
