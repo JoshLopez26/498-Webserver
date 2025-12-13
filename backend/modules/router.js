@@ -1,7 +1,7 @@
 const express = require('express');
 const db = require('../database');
 const argon2 = require('argon2');
-const { validatePassword, hashPassword, comparePassword } = require('./modules/password-utils')
+const { validatePassword, hashPassword, comparePassword } = require('./password-utils')
 
 module.exports = (users, comments) => {
     const router = express.Router();
