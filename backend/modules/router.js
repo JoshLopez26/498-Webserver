@@ -6,7 +6,7 @@ const { validatePassword, hashPassword, comparePassword } = require('./password-
 module.exports = (users, comments) => {
     const router = express.Router();
 
-    app.use(express.json()); // Parse JSON bodies
+    router.use(express.json()); // Parse JSON bodies
 
     // Get user data if logged in, set as guest if else
     function getUser(req){
