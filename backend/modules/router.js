@@ -42,7 +42,7 @@ module.exports = (users, comments) => {
     });
 
     // Handle login form submission
-    router.post('/login', (req, res) => {
+    router.post('/login', async (req, res) => {
         try {
             const { username, password } = req.body;
             
