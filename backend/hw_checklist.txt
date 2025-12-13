@@ -14,12 +14,6 @@ Due: Dec 19th, 11:59pm
 
     2.1 Database Migration
         - Migrate all data from in-memory storage to SQLite3 database
-        - Create database schema for:
-            – Users: username, password (hashed), email, display name, profile customization
-            fields, account lockout fields
-            – Sessions: session data linked to users
-            – Comments: author (linked to user), text, timestamps, etc
-            – Login Attempts: username, IP address, timestamp, success/failure status
         - Include database connection handling and error management
         
     2.3 User Authentication and Security

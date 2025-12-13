@@ -1,5 +1,6 @@
 const express = require('express');
 const session = require('express-session');
+const SQLiteStore = require('./sqlite-session-store');
 const app = express();
 const path = require('path');
 const hbs = require('hbs');
@@ -25,15 +26,17 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(__dirname + '/public'));
 app.use(cookieParser());
 
-// Initialize user session
+
+const sessionStore = new SQLiteStore({
+  db: path.join(__dirname, 'sessions.db'),
+  table: 'sessions'
+});
+
 app.use(session({
-    secret: 'Ns789ySN&*Ysb7YN*AY&NSNywn7ynd&*YDB*&E',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        secure: false, // Set to true if using HTTPS
-        maxAge: 24 * 60 * 60 * 1000 // 24 hours
-    }
+  store: sessionStore,
+  secret: 'Ns789ySN&*Ysb7YN*AY&NSNywn7ynd&*YDB*&E',
+  resave: false,
+  saveUninitialized: false
 }));
 
 // Handle routes through router module

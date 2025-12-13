@@ -1,7 +1,12 @@
 const express = require('express');
+const db = require('../database');
+const argon2 = require('argon2');
+const { validatePassword, hashPassword, comparePassword } = require('./modules/password-utils')
 
 module.exports = (users, comments) => {
     const router = express.Router();
+
+    app.use(express.json()); // Parse JSON bodies
 
     // Get user data if logged in, set as guest if else
     function getUser(req){
@@ -38,23 +43,44 @@ module.exports = (users, comments) => {
 
     // Handle login form submission
     router.post('/login', (req, res) => {
-        const username = req.body.username;
-        const password = req.body.password;
-
-        if (!username || !password) {
-            return res.send("Username and password required.");
-        }
-
-        if (users[username] && users[username] === password) {
+        try {
+            const { username, password } = req.body;
+            
+            // Validate input
+            if (!username || !password) {
+            return res.redirect('/api/auth/login?error=' + encodeURIComponent('Username and password are required'));
+            }
+            
+            // Find user by username
+            const user = db.prepare('SELECT * FROM users WHERE username = ?').get(username);
+            
+            if (!user) {
+            // Don't reveal if username exists (security best practice)
+            return res.redirect('/api/auth/login?error=' + encodeURIComponent('Invalid username or password'));
+            }
+            
+            // Compare entered password with stored hash
+            const passwordMatch = await comparePassword(password, user.password_hash);
+            
+            if (!passwordMatch) {
+            return res.redirect('/api/auth/login?error=' + encodeURIComponent('Invalid username or password'));
+            }
+            
+            // Successful login - update last login time
+            db.prepare('UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = ?')
+            .run(user.id);
+            
+            // Create session
+            req.session.userId = user.id;
+            req.session.username = user.username;
             req.session.isLoggedIn = true;
-            req.session.username = username;
-            req.session.loginTime = new Date().toISOString();
-            req.session.visitCount = 0;
-
-            console.log(`User ${username} logged in at ${req.session.loginTime}`);
-            return res.redirect('/');
-        } else {
-            return res.send("Invalid username or password.");
+            
+            // Redirect to success page
+            res.redirect(`/public/login-success.html?username=${encodeURIComponent(user.username)}`);
+            
+        } catch (error) {
+            console.error('Login error:', error);
+            res.redirect('/public/error.html?message=' + encodeURIComponent('An internal server error occurred. Please try again later.') + '&back=/api/auth/login');
         }
     });
 
@@ -64,26 +90,43 @@ module.exports = (users, comments) => {
     });
 
     // Handle register form submission
-    router.post('/register', (req, res) => {
-        const username = req.body.username;
-        const password = req.body.password;
-
-        if (!username || !password) {
-            return res.send("Username and password required.");
+    router.post('/register', async (req, res) => {
+        //const username = req.body.username;
+        try {
+            const { username, password } = req.body;
+            
+            // Validate input
+            if (!username || !password) {
+            return res.redirect('/api/auth/register?error=' + encodeURIComponent('Username and password are required'));
+            }
+            
+            // Validate password requirements
+            const validation = validatePassword(password);
+            if (!validation.valid) {
+            const errorsText = validation.errors.join(', ');
+            return res.redirect('/api/auth/register?error=' + encodeURIComponent('Password does not meet requirements: ' + errorsText));
+            }
+            
+            // Check if username already exists
+            const existingUser = db.prepare('SELECT id FROM users WHERE username = ?').get(username);
+            if (existingUser) {
+            return res.redirect('/api/auth/register?error=' + encodeURIComponent('Username already exists. Please choose a different username.'));
+            }
+            
+            // Hash the password before storing
+            const passwordHash = await hashPassword(password);
+            
+            // Insert new user into database
+            const stmt = db.prepare('INSERT INTO users (username, password_hash) VALUES (?, ?)');
+            const result = stmt.run(username, passwordHash);
+            
+            // Redirect to success page with username
+            res.redirect(`/public/register-success.html?username=${encodeURIComponent(username)}&userId=${result.lastInsertRowid}`);
+            
+        } catch (error) {
+            console.error('Registration error:', error);
+            res.redirect('/public/error.html?message=' + encodeURIComponent('An internal server error occurred. Please try again later.') + '&back=/api/auth/register');
         }
-
-        if (users[username]) {
-            return res.send("Username already exists. Please log in instead.");
-        }
-
-        users[username] = password;
-        console.log(`Registered new user: ${username}`);
-
-        req.session.isLoggedIn = true;
-        req.session.username = username;
-        req.session.loginTime = new Date().toISOString();
-        req.session.visitCount = 0;
-
         res.redirect('/');
     });
 
@@ -118,18 +161,25 @@ module.exports = (users, comments) => {
         res.render('comment/new');
     });
 
-    // Logout user
-    router.post('/logout', (req, res) => {
-        if(req.session) {
-            req.session.destroy((err) => {
-                if (err) {
-                    console.log('Error destroying session:', err);
-                }
-            });
-        }
+    //Logout user
+    router.get('/logout', (req, res) => {
+        req.session.destroy((err) => {
+            if (err) {
+                console.error('Logout error:', err);
+                return res.redirect('/public/error.html?message=' + encodeURIComponent('An error occurred while logging out.') + '&back=/');
+            }
+            res.redirect('/public/logged-out.html');
+        });
+    });
 
-        res.clearCookie('name');
-        res.redirect('/');
+    router.post('/logout', (req, res) => {
+        req.session.destroy((err) => {
+            if (err) {
+                console.error('Logout error:', err);
+                return res.redirect('/public/error.html?message=' + encodeURIComponent('An error occurred while logging out.') + '&back=/');
+            }
+            res.redirect('/public/logged-out.html');
+        });
     });
 
     // Route to discover-pdf module
