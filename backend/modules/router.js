@@ -95,11 +95,11 @@ module.exports = (users, comments) => {
     router.post('/register', async (req, res) => {
         //const username = req.body.username;
         try {
-            const { username, password } = req.body;
+            const { username, password, email, display } = req.body;
             
             // Validate input
-            if (!username || !password) {
-                console.error('Error: Missing username or password');
+            if (!username || !password || !email || !display) {
+                console.error('Error: Missing one or more input fields');
                 return res.redirect('/');
             }
             
@@ -113,19 +113,27 @@ module.exports = (users, comments) => {
             // Check if username already exists
             const existingUser = db.prepare('SELECT id FROM users WHERE name = ?').get(username);
             if (existingUser) {
-                console.error('Error: Username already exists');
+                console.error('Error: Username already used');
+                return res.redirect('/');
+            }
+
+            const existingEmail = db.prepare('SELECT id FROM users WHERE email = ?').get(email);
+            if (existingEmail) {
+                console.error('Error: Email already used');
+                return res.redirect('/');
+            }
+            const existingDisplay = db.prepare('SELECT id FROM users WHERE display_name = ?').get(display);
+            if (existingDisplay) {
+                console.error('Error: Display name already used');
                 return res.redirect('/');
             }
             
             // Hash the password before storing
             const passwordHash = await hashPassword(password);
-
-            //TEMP EMAIL
-            const tmpEmail = `temp@gmail.com`;
             
             // Insert new user into database
-            const stmt = db.prepare('INSERT INTO users (name, password, email) VALUES (?, ?, ?)');
-            const result = stmt.run(username, passwordHash, tmpEmail);
+            const stmt = db.prepare('INSERT INTO users (name, password, email, display_name) VALUES (?, ?, ?)');
+            const result = stmt.run(username, passwordHash, email, display);
             
             // Redirect to success page with username
             res.redirect(`/login`);

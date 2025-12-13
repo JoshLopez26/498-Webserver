@@ -11,10 +11,10 @@ db.pragma('foreign_keys = ON');
 db.exec(`
     CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
+        name TEXT UNIQUE NOT NULL,
         password TEXT NOT NULL,
         email TEXT UNIQUE NOT NULL, 
-        display_name TEXT,
+        display_name TEXT UNIQUE NOT NULL,,
         last_login DATETIME
     );
 
