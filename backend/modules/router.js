@@ -78,7 +78,7 @@ module.exports = (users, comments) => {
             req.session.isLoggedIn = true;
             
             // Redirect to success page
-            res.redirect(`/public/login-success.html?name=${encodeURIComponent(user.username)}`);
+            res.redirect(`/`);
             
         } catch (error) {
             console.error('Login error:', error);
@@ -128,7 +128,8 @@ module.exports = (users, comments) => {
             const result = stmt.run(username, passwordHash, tmpEmail);
             
             // Redirect to success page with username
-            res.redirect(`/public/register-success.html?name=${encodeURIComponent(username)}&userId=${result.lastInsertRowid}`);
+            res.redirect(`/login`);
+            //res.redirect(`/public/register-success.html?name=${encodeURIComponent(username)}&userId=${result.lastInsertRowid}`);
             
         } catch (error) {
             console.error('Registration error:', error);
