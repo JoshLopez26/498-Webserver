@@ -119,10 +119,13 @@ module.exports = (users, comments) => {
             
             // Hash the password before storing
             const passwordHash = await hashPassword(password);
+
+            //TEMP EMAIL
+            const tmpEmail = `temp@gmail.com`;
             
             // Insert new user into database
-            const stmt = db.prepare('INSERT INTO users (name, password) VALUES (?, ?)');
-            const result = stmt.run(username, passwordHash);
+            const stmt = db.prepare('INSERT INTO users (name, password, email) VALUES (?, ?, ?)');
+            const result = stmt.run(username, passwordHash, tmpEmail);
             
             // Redirect to success page with username
             res.redirect(`/public/register-success.html?name=${encodeURIComponent(username)}&userId=${result.lastInsertRowid}`);
