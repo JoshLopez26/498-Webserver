@@ -14,7 +14,7 @@ db.exec(`
         name TEXT UNIQUE NOT NULL,
         password TEXT NOT NULL,
         email TEXT UNIQUE NOT NULL, 
-        display_name TEXT UNIQUE NOT NULL,,
+        display_name TEXT UNIQUE NOT NULL,
         last_login DATETIME
     );
 
