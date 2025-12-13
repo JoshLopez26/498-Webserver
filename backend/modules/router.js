@@ -148,6 +148,10 @@ module.exports = (users, comments) => {
     // Render Comments page
     router.get('/comments', (req, res) => {
         let user = getUser(req);
+        if(req.session && req.session.isLoggedIn){
+            db.prepare('SELECT comments.text, comments.created_at, users.display_name FROM comments JOIN users ON comments.user_id = users.id ORDER BY comments.created_at DESC')
+            .all();
+        }
         res.render('comments', {user, comments});
     });
 
@@ -155,6 +159,19 @@ module.exports = (users, comments) => {
     router.post('/comment', (req, res) => {
         const comment = req.body.comment;
         let user = getUser(req);
+
+        if(comment && req.session && req.session.isLoggedIn)
+        {
+            db.prepare('INSERT INTO comments (user_id, text) VALUES (?, ?)')
+            .run(req.session.userId, comment);
+            console.log(`Sent comment: ${comment}`);
+        }
+        else
+        {
+            return res.send("Can't submit empty comment or user not logged in.");
+        }
+
+        /*
 
         if (comment) {
             const commentObj = {
@@ -166,7 +183,7 @@ module.exports = (users, comments) => {
             console.log(`Sent comment: ${comment}`);
         } else {
             return res.send("Can't submit empty comment.");
-        }
+        }*/
 
         res.render('comments', {user, comments});
     });
