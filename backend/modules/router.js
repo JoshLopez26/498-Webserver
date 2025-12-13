@@ -134,7 +134,6 @@ module.exports = (users, comments) => {
             console.error('Registration error:', error);
             res.redirect('/');
         }
-        res.redirect('/');
     });
 
     // Render Comments page
