@@ -14,7 +14,8 @@ db.exec(`
         name TEXT NOT NULL,
         password TEXT NOT NULL,
         email TEXT UNIQUE NOT NULL, 
-        display_name TEXT
+        display_name TEXT,
+        last_login DATETIME
     );
 
     CREATE TABLE IF NOT EXISTS sessions (

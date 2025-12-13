@@ -61,7 +61,7 @@ module.exports = (users, comments) => {
             }
             
             // Compare entered password with stored hash
-            const passwordMatch = await comparePassword(password, user.password_hash);
+            const passwordMatch = await comparePassword(password, user.password);
             
             if (!passwordMatch) {
                 console.error('Error: Incorect password');
@@ -74,7 +74,7 @@ module.exports = (users, comments) => {
             
             // Create session
             req.session.userId = user.id;
-            req.session.username = user.username;
+            req.session.username = user.name;
             req.session.isLoggedIn = true;
             
             // Redirect to success page

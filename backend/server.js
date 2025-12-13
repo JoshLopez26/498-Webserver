@@ -1,6 +1,8 @@
 const express = require('express');
 const session = require('express-session');
 const SQLiteStore = require('./sqlite-session-store');
+const argon2 = require('argon2');
+const { validatePassword, hashPassword, comparePassword } = require('./modules/password-utils')
 const app = express();
 const path = require('path');
 const hbs = require('hbs');
