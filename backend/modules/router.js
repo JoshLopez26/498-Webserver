@@ -48,23 +48,25 @@ module.exports = (users, comments) => {
             
             // Validate input
             if (!username || !password) {
-            return res.redirect('/api/auth/login?error=' + encodeURIComponent('Username and password are required'));
+                console.error('Missing username or password');
+                return res.redirect('/');
             }
             
             // Find user by username
-            const user = db.prepare('SELECT * FROM users WHERE username = ?').get(username);
+            const user = db.prepare('SELECT * FROM users WHERE name = ?').get(username);
             
             if (!user) {
-            // Don't reveal if username exists (security best practice)
-            return res.redirect('/api/auth/login?error=' + encodeURIComponent('Invalid username or password'));
+                console.error('Error: User not found');
+                return res.redirect('/');
             }
             
             // Compare entered password with stored hash
             const passwordMatch = await comparePassword(password, user.password_hash);
             
             if (!passwordMatch) {
-            return res.redirect('/api/auth/login?error=' + encodeURIComponent('Invalid username or password'));
-            }
+                console.error('Error: Incorect password');
+                return res.redirect('/');
+           }
             
             // Successful login - update last login time
             db.prepare('UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = ?')
@@ -76,11 +78,11 @@ module.exports = (users, comments) => {
             req.session.isLoggedIn = true;
             
             // Redirect to success page
-            res.redirect(`/public/login-success.html?username=${encodeURIComponent(user.username)}`);
+            res.redirect(`/public/login-success.html?name=${encodeURIComponent(user.username)}`);
             
         } catch (error) {
             console.error('Login error:', error);
-            res.redirect('/public/error.html?message=' + encodeURIComponent('An internal server error occurred. Please try again later.') + '&back=/api/auth/login');
+            res.redirect('/');
         }
     });
 
@@ -97,35 +99,37 @@ module.exports = (users, comments) => {
             
             // Validate input
             if (!username || !password) {
-            return res.redirect('/api/auth/register?error=' + encodeURIComponent('Username and password are required'));
+                console.error('Error: Missing username or password');
+                return res.redirect('/');
             }
             
             // Validate password requirements
             const validation = validatePassword(password);
             if (!validation.valid) {
-            const errorsText = validation.errors.join(', ');
-            return res.redirect('/api/auth/register?error=' + encodeURIComponent('Password does not meet requirements: ' + errorsText));
+                console.error('Error: ' + validation.message);
+                return res.redirect('/');
             }
             
             // Check if username already exists
-            const existingUser = db.prepare('SELECT id FROM users WHERE username = ?').get(username);
+            const existingUser = db.prepare('SELECT id FROM users WHERE name = ?').get(username);
             if (existingUser) {
-            return res.redirect('/api/auth/register?error=' + encodeURIComponent('Username already exists. Please choose a different username.'));
+                console.error('Error: Username already exists');
+                return res.redirect('/');
             }
             
             // Hash the password before storing
             const passwordHash = await hashPassword(password);
             
             // Insert new user into database
-            const stmt = db.prepare('INSERT INTO users (username, password_hash) VALUES (?, ?)');
+            const stmt = db.prepare('INSERT INTO users (name, password) VALUES (?, ?)');
             const result = stmt.run(username, passwordHash);
             
             // Redirect to success page with username
-            res.redirect(`/public/register-success.html?username=${encodeURIComponent(username)}&userId=${result.lastInsertRowid}`);
+            res.redirect(`/public/register-success.html?name=${encodeURIComponent(username)}&userId=${result.lastInsertRowid}`);
             
         } catch (error) {
             console.error('Registration error:', error);
-            res.redirect('/public/error.html?message=' + encodeURIComponent('An internal server error occurred. Please try again later.') + '&back=/api/auth/register');
+            res.redirect('/');
         }
         res.redirect('/');
     });
