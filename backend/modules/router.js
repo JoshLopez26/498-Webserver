@@ -10,32 +10,9 @@ module.exports = () => {
 
     router.use(express.json()); // Parse JSON bodies
 
-    // Get user data if logged in, set as guest if else
-    function getUser(req){
-        let user = {  // Default Guest object
-            username: "Guest",
-            isLoggedIn: false,
-            loginTime: null,
-            visitCount: 0
-        };
-
-        if (req.session && req.session.isLoggedIn) {
-            user = {
-                username: req.session.username,
-                isLoggedIn: true,
-                loginTime: req.session.loginTime,
-                visitCount: req.session.visitCount || 0
-            };
-            req.session.visitCount = (req.session.visitCount || 0) + 1;
-        }
-
-        return user;
-    }
-
     // Home page
     router.get('/', (req, res) => {
-        let user = getUser(req);
-        res.render('home', { user: user });
+        res.render('home', { user: req.session });
     });
 
     // Render Login page
@@ -132,6 +109,12 @@ module.exports = () => {
                 return res.redirect('/register?error=' + encodeURIComponent('Email already in use'));
             }
             
+            //https://www.geeksforgeeks.org/javascript/javascript-program-to-validate-an-email-address/
+            const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!pattern.test(email)) {
+                return res.redirect('/register?error=' + encodeURIComponent('Invalid email format'));
+            }
+
             const existingDisplay = db.prepare('SELECT id FROM users WHERE display_name = ?').get(display);
             if (existingDisplay) {
                 return res.redirect('/register?error=' + encodeURIComponent('Display name already in use'));
@@ -158,19 +141,23 @@ module.exports = () => {
         return db.prepare('SELECT comments.text, comments.created_at, users.display_name FROM comments JOIN users ON comments.user_id = users.id ORDER BY comments.created_at DESC').all();
     }
 
+    router.get('/profile', (req, res) => {
+        res.render('profile', {user: req.session});
+    });
+            //const user = db.prepare('SELECT username, email, display_name, name_color, last_login FROM users WHERE id = ?').get(req.session.userId);
+
     // Render Comments page
     router.get('/comments', (req, res) => {
         var commentList = [];
         if(req.session && req.session.isLoggedIn){
             commentList = loadComments();
         }
-        res.render('comments', {user: getUser(req), comments: commentList});
+        res.render('comments', {user: req.session, comments: commentList});
     });
 
     // Handle new comment
     router.post('/comment', (req, res) => {
         const comment = req.body.comment;
-        let user = getUser(req);
 
         if(comment && req.session && req.session.isLoggedIn)
         {
@@ -178,7 +165,7 @@ module.exports = () => {
             .run(req.session.userId, comment);
             console.log(`Sent comment: ${comment}`);
             const commentList = loadComments();
-            res.render('comments', {user: user, comments: commentList});
+            res.render('comments', {user: req.session, comments: commentList});
         }
         else
         {

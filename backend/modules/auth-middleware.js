@@ -42,11 +42,7 @@ function checkLoginLockout(req, res, next) {
   
   if (lockoutStatus.locked) {
     const minutesRemaining = Math.ceil(lockoutStatus.remainingTime / (60 * 1000));
-    return res.status(429).json({
-      error: 'Too many failed login attempts',
-      message: `Too many failed attempts for this username. Please try again in ${minutesRemaining} minute(s).`,
-      remainingTime: lockoutStatus.remainingTime
-    });
+    return res.redirect('/login?error=' + encodeURIComponent(`Too many failed attempts for this username. Please try again in ${minutesRemaining} minute(s).`));
   }
   
   next();

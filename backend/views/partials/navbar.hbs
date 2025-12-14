@@ -92,7 +92,9 @@
 	</div>
 	<div class="nav-right">
 		{{#if user.isLoggedIn}}
-			<strong>{{user.display_name}}</strong>
+			<form action="/profile" method="GET">
+				<button type="submit"><strong>{{user.display_name}}</strong></button>
+			</form>
 		{{/if}}
 	</div>
 </nav>
