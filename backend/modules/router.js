@@ -193,23 +193,23 @@ module.exports = () => {
     });
 
     router.post('/change-password', requireAuth, async (req, res) => {
-        res.render('home', { user: req.session });
+        res.render('profile', {user: req.session});
     });
 
     router.get('/change-email', requireAuth, (req, res) => {
-        res.render('change-email', { name: 'Email', id: 'email', user: req.session });
+        res.render('change-setting', { name: 'Email', id: 'email', user: req.session });
     });
 
     router.post('/change-email', requireAuth, async (req, res) => {
-        res.render('home', { user: req.session });
+        res.render('profile', {user: req.session});
     });
 
     router.get('/change-display', requireAuth, (req, res) => {
-        res.render('change-email', { name: 'Display Name', id: 'display', user: req.session });
+        res.render('change-setting', { name: 'Display Name', id: 'display', user: req.session });
     });
 
     router.post('/change-display', requireAuth, async (req, res) => {
-        res.render('home', { user: req.session });
+        res.render('profile', {user: req.session});
     });
 
     // Route to discover-pdf module
