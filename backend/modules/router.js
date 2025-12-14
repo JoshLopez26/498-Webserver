@@ -204,7 +204,7 @@ module.exports = () => {
             return res.render('change-setting', { name: 'Password', id: 'password', hide: true, user: req.session, error: 'New password must be different from old password' });
         }
 
-        if (!comparePassword(old_password, req.session.password)) {
+        if (!comparePassword(old_password, user.password)) {
             return res.render('change-setting', { name: 'Password', id: 'password', hide: true, user: req.session, error: 'Old password is incorrect' });
         }
 
