@@ -193,7 +193,28 @@ module.exports = () => {
     });
 
     router.post('/change-password', requireAuth, async (req, res) => {
-        res.render('profile', {user: req.session});
+        const { password } = req.body;
+
+        // Validate password requirements
+        const validation = validatePassword(password);
+        if (!validation.valid) {
+            const errMessage = validation.errors.join(', ');
+            return res.render('change-setting', { name: 'Password', id: 'password', user: req.session, error: errMessage });
+        }
+
+        const passwordHash = await hashPassword(password);
+            
+        // Insert new user into database
+        const stmt = db.prepare('UPDATE users SET password = ? WHERE userID = ?');
+        const result = stmt.run(passwordHash, req.session.userId);
+        
+        req.session.destroy((err) => {
+            if (err) {
+                console.error('Logout error:', err);
+                return res.status(500).json({ error: 'Error logging out' });
+            }
+            res.redirect(`/login`);
+        });
     });
 
     router.get('/change-email', requireAuth, (req, res) => {
