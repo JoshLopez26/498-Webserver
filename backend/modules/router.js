@@ -2,6 +2,8 @@ const express = require('express');
 const db = require('../database');
 const argon2 = require('argon2');
 const { validatePassword, hashPassword, comparePassword } = require('./password-utils')
+const loginTracker = require('./login-tracker');
+const { checkLoginLockout, getClientIP } = require('./auth-middleware');
 
 module.exports = () => {
     const router = express.Router();
@@ -42,12 +44,16 @@ module.exports = () => {
     });
 
     // Handle login form submission
-    router.post('/login', async (req, res) => {
+    router.post('/login', checkLoginLockout, async (req, res) => {
         try {
             const { username, password } = req.body;
+            const ipAddress = getClientIP(req);
             
             // Validate input
             if (!username || !password) {
+                if (username) {
+                    loginTracker.recordAttempt(ipAddress, username, false);
+                }
                 console.error('Missing username or password');
                 return res.redirect('/');
             }
@@ -56,6 +62,7 @@ module.exports = () => {
             const user = db.prepare('SELECT * FROM users WHERE name = ?').get(username);
             
             if (!user) {
+                loginTracker.recordAttempt(ipAddress, username, false);
                 console.error('Error: User not found');
                 return res.redirect('/');
             }
@@ -64,19 +71,17 @@ module.exports = () => {
             const passwordMatch = await comparePassword(password, user.password);
             
             if (!passwordMatch) {
-                user.login_attempts += 1;
-                db.prepare('UPDATE login_attempts SET attempts = ? WHERE id = ?')
-                .run(user.login_attempts, user.id);
-                console.error('Error: Incorect password, Login attempts: ' + user.login_attempts);
+                loginTracker.recordAttempt(ipAddress, username, false);
+                console.error('Error: Incorect password');
                 return res.redirect('/');
-           }
-            
-            // Successful login - update last login time
+            }
+            // Successful login
+            loginTracker.recordAttempt(ipAddress, username, true);
             db.prepare('UPDATE users SET last_login = CURRENT_TIMESTAMP, login_attempts = 0 WHERE id = ?')
             .run(user.id);
             
-           console.log(`Password ${user.password}`);
-           console.log(`Login attempts: ${user.login_attempts}`);
+            console.log(`Password ${user.password}`);
+            console.log(`Login attempts: ${user.login_attempts}`);
 
             // Create session
             req.session.userId = user.id;
@@ -157,10 +162,11 @@ module.exports = () => {
 
     // Render Comments page
     router.get('/comments', (req, res) => {
+        var commentList = [];
         if(req.session && req.session.isLoggedIn){
-            const commentList = loadComments();
-            res.render('comments', {user: getUser(req), commentList});
+            commentList = loadComments();
         }
+        res.render('comments', {user: getUser(req), commentList});
     });
 
     // Handle new comment
@@ -202,9 +208,9 @@ module.exports = () => {
         req.session.destroy((err) => {
             if (err) {
                 console.error('Logout error:', err);
-                return res.redirect('/public/error.html?message=' + encodeURIComponent('An error occurred while logging out.') + '&back=/');
+                return res.status(500).json({ error: 'Error logging out' });
             }
-            res.redirect('/public/logged-out.html');
+            res.json({ message: 'Logged out successfully' });
         });
     });
 

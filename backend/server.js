@@ -7,11 +7,8 @@ const app = express();
 const path = require('path');
 const hbs = require('hbs');
 const cookieParser = require('cookie-parser');
-
-
 const PORT = process.env.PORT || 3000;
-const users = {};
-const comments = [];
+
 
 //USING METADATA FILE FORMAT (JSON) FOR PDF DETAILS
 
