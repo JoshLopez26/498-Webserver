@@ -189,7 +189,7 @@ module.exports = () => {
     });
     
     router.get('/change-password', requireAuth, (req, res) => {
-        res.render('change-setting', { page: 'Password', id: 'password', user: req.session });
+        res.render('change-setting', { name: 'Password', id: 'password', user: req.session });
     });
 
     router.post('/change-password', requireAuth, async (req, res) => {
@@ -197,7 +197,7 @@ module.exports = () => {
     });
 
     router.get('/change-email', requireAuth, (req, res) => {
-        res.render('change-email', { page: 'Email', id: 'email', user: req.session });
+        res.render('change-email', { name: 'Email', id: 'email', user: req.session });
     });
 
     router.post('/change-email', requireAuth, async (req, res) => {
@@ -205,7 +205,7 @@ module.exports = () => {
     });
 
     router.get('/change-display', requireAuth, (req, res) => {
-        res.render('change-email', { page: 'Display Name', id: 'display', user: req.session });
+        res.render('change-email', { name: 'Display Name', id: 'display', user: req.session });
     });
 
     router.post('/change-display', requireAuth, async (req, res) => {
