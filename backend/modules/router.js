@@ -77,11 +77,10 @@ module.exports = () => {
             }
             // Successful login
             loginTracker.recordAttempt(ipAddress, username, true);
-            db.prepare('UPDATE users SET last_login = CURRENT_TIMESTAMP, login_attempts = 0 WHERE id = ?')
+            db.prepare('UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = ?')
             .run(user.id);
             
             console.log(`Password ${user.password}`);
-            console.log(`Login attempts: ${user.login_attempts}`);
 
             // Create session
             req.session.userId = user.id;
