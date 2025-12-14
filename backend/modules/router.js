@@ -333,8 +333,6 @@ module.exports = () => {
 
     router.post('/change-name-color', requireAuth, (req, res) => {
         const { name_color } = req.body;
-        const hexColor = "#" + name_color;
-
         const pattern = /^([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/;
 
         if (!pattern.test(name_color)) {
