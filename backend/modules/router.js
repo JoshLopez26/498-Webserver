@@ -3,7 +3,7 @@ const db = require('../database');
 const argon2 = require('argon2');
 const { validatePassword, hashPassword, comparePassword } = require('./password-utils')
 const loginTracker = require('./login-tracker');
-const { checkLoginLockout, getClientIP } = require('./auth-middleware');
+const { requireAuth, checkLoginLockout, getClientIP } = require('./auth-middleware');
 
 module.exports = () => {
     const router = express.Router();
@@ -186,6 +186,30 @@ module.exports = () => {
             }
             res.render('home', { message: 'Logged out successfully' });
         });
+    });
+    
+    router.get('/change-password', requireAuth, (req, res) => {
+        res.render('change-setting', { page: 'Password', id: 'password', user: req.session });
+    });
+
+    router.post('/change-password', requireAuth, async (req, res) => {
+        res.render('home', { user: req.session });
+    });
+
+    router.get('/change-email', requireAuth, (req, res) => {
+        res.render('change-email', { page: 'Email', id: 'email', user: req.session });
+    });
+
+    router.post('/change-email', requireAuth, async (req, res) => {
+        res.render('home', { user: req.session });
+    });
+
+    router.get('/change-display', requireAuth, (req, res) => {
+        res.render('change-email', { page: 'Display Name', id: 'display', user: req.session });
+    });
+
+    router.post('/change-display', requireAuth, async (req, res) => {
+        res.render('home', { user: req.session });
     });
 
     // Route to discover-pdf module

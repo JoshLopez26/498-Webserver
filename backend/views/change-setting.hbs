@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bogobit</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="icon" href="/images/favicon.png" type="image/x-icon">
+</head>
+<body>
+    <h1>Change {{name}}</h1>
+    {{#if error}}
+        <p class="error-message">{{error}}</p>
+    {{/if}}
+    <!-- Input field to change profile setting -->
+    <form method="POST" action="./change-{{id}}">
+        <p>
+            <label for={{id}}>Old {{}}:</label><br>
+            <input type="text" name={{id}} required>
+        </p>
+        <p>
+            <label for={{id}}>New {{}}:</label><br>
+            <input type="text" name={{id}} required>
+        </p>
+        <p>
+            <button class="themed-button" type="submit">Login</button>
+            <a href="/">Cancel</a>
+        </p>
+    </form>
+</body>
+</html>
+

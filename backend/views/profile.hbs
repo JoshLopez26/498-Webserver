@@ -6,23 +6,24 @@
     <link rel="icon" href="/images/favicon.png" type="image/x-icon">
 </head>
 <body>
-    <h1>Home</h1>
+    <h1>Your Profile</h1>
     {{> navbar}}
 
     <!-- Display online status of the user -->
-    <h2>{{user.display_name}}</h2>
+    <h2> Profile Settings:</h2>
     <div class="profile-settings">
         <p>
+            {{user.display_name}}<br>
             <label for="name-color">Name Color:</label><br>
             <input type="text" name="name-color">
         </p>
-        <form class="themed-form" action="/" method="GET">
+        <form class="themed-form" action="/change-password" method="GET">
             <button class="themed-button" type="submit">Change Password</button>
         </form>
-        <form class="themed-form" action="/" method="GET">
+        <form class="themed-form" action="/change-email" method="GET">
             <button class="themed-button" type="submit">Change Email</button>
         </form>
-        <form class="themed-form" action="/" method="GET">
+        <form class="themed-form" action="/change-display" method="GET">
             <button class="themed-button" type="submit">Change Display Name</button>
         </form>
     </div>
