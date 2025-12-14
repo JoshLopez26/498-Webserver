@@ -338,10 +338,8 @@ module.exports = () => {
         const pattern = /^([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/;
 
         if (!pattern.test(name_color)) {
-            settings.error = 'Invalid input, must be a hex color code (No # symbol)';
-            return res.render('change-setting', settings);
+            return res.render('profile', {user: req.session, error: 'Invalid color format, must be a hex color code (No # symbol)' });
         }
-
 
         //Update successful
         db.prepare('UPDATE users SET name_color = ? WHERE id = ?').run(name_color, req.session.userId);

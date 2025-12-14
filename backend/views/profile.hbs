@@ -12,11 +12,14 @@
     <!-- Display online status of the user -->
     <h2> Profile Settings (<span style="#{{user.name_color}}">{{user.display_name}}</span>): </h2>
     <div class="profile-settings"> 
+        {{#if error}}
+            <p class="error-message">{{error}}</p>
+        {{/if}}
         <form class="themed-form" action="/change-name-color" method="POST">
             <label for="name-color">Name Color:</label><br>
             <input type="text" id="name-color" name="name-color">
             <button class="themed-button" type="submit">Apply</button>
-        </form>
+        </form><br>
         <form class="themed-form" action="/change-password" method="GET">
             <button class="themed-button" type="submit">Change Password</button>
         </form>
