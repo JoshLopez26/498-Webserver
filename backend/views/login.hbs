@@ -7,7 +7,9 @@
 </head>
 <body>
     <h1>Login</h1>
-
+    {{#if error}}
+        <p class="error-message">{{error}}</p>
+    {{/if}}
     <!-- Input field for username and password, submit or go to register page -->
     <form method="POST" action="/login">
         <p>

@@ -54,8 +54,7 @@ module.exports = () => {
                 if (username) {
                     loginTracker.recordAttempt(ipAddress, username, false);
                 }
-                console.error('Missing username or password');
-                return res.redirect('/');
+                return res.redirect('/login?error=' + encodeURIComponent('Missing username or password'));
             }
             
             // Find user by username
@@ -63,7 +62,7 @@ module.exports = () => {
             
             if (!user) {
                 loginTracker.recordAttempt(ipAddress, username, false);
-                return res.render('error', { message: 'User not found.' });
+                return res.redirect('/login?error=' + encodeURIComponent('User not found'));
             }
             
             // Compare entered password with stored hash
@@ -71,8 +70,7 @@ module.exports = () => {
             
             if (!passwordMatch) {
                 loginTracker.recordAttempt(ipAddress, username, false);
-                console.error('Error: Incorect password');
-                return res.redirect('/');
+                return res.redirect('/login?error=' + encodeURIComponent('Invalid password'));
             }
             // Successful login
             loginTracker.recordAttempt(ipAddress, username, true);
@@ -91,8 +89,8 @@ module.exports = () => {
             res.redirect(`/`);
             
         } catch (error) {
-            console.error('Login error:', error);
-            res.redirect('/');
+            const errMessage = 'Login error:' + error;
+            return res.redirect('/login?error=' + encodeURIComponent(errMessage));
         }
     });
 
@@ -109,33 +107,30 @@ module.exports = () => {
             
             // Validate input
             if (!username || !password || !email || !display) {
-                console.error('Error: Missing one or more input fields');
-                return res.redirect('/');
+                return res.redirect('/register?error=' + encodeURIComponent('Missing one or more input fields'));
             }
             
             // Validate password requirements
             const validation = validatePassword(password);
             if (!validation.valid) {
-                console.error('Error: ' + validation.message);
-                return res.redirect('/');
+                const errMessage = 'Error: ' + validation.message;
+                return res.redirect('/register?error=' + encodeURIComponent(errMessage));
             }
             
             // Check if username already exists
             const existingUser = db.prepare('SELECT id FROM users WHERE username = ?').get(username);
             if (existingUser) {
-                console.error('Error: Username already used');
-                return res.redirect('/');
+                return res.redirect('/register?error=' + encodeURIComponent('Username already in use'));
             }
 
             const existingEmail = db.prepare('SELECT id FROM users WHERE email = ?').get(email);
             if (existingEmail) {
-                console.error('Error: Email already used');
-                return res.redirect('/');
+                return res.redirect('/register?error=' + encodeURIComponent('Email already in use'));
             }
+            
             const existingDisplay = db.prepare('SELECT id FROM users WHERE display_name = ?').get(display);
             if (existingDisplay) {
-                console.error('Error: Display name already used');
-                return res.redirect('/');
+                return res.redirect('/register?error=' + encodeURIComponent('Display name already in use'));
             }
             
             // Hash the password before storing
@@ -150,8 +145,8 @@ module.exports = () => {
             //res.redirect(`/public/register-success.html?name=${encodeURIComponent(username)}&userId=${result.lastInsertRowid}`);
             
         } catch (error) {
-            console.error('Registration error:', error);
-            res.redirect('/');
+            const errMessage = 'Registration error:' + error;
+            return res.redirect('/register?error=' + encodeURIComponent(errMessage));
         }
     });
 
