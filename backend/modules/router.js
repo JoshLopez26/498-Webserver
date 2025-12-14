@@ -189,35 +189,36 @@ module.exports = () => {
     });
     
     router.get('/change-password', requireAuth, (req, res) => {
-        res.render('change-setting', { name: 'Password', id: 'password', user: req.session });
+        res.render('change-setting', { name: 'Password', id: 'password', hide: true, user: req.session });
     });
 
     router.post('/change-password', requireAuth, async (req, res) => {
-        const { oldPassword, newPassword } = req.body;
+        const { old_password, new_password } = req.body;
+        const user = db.prepare('SELECT * FROM users WHERE id = ?').get(req.session.userId);
 
-        if  (!oldPassword || !newPassword) {
-            return res.render('change-setting', { name: 'Password', id: 'password', user: req.session, error: 'Missing old or new password' });
+        if  (!old_password || !new_password) {
+            return res.render('change-setting', { name: 'Password', id: 'password', hide: true, user: req.session, error: 'Missing old or new password' });
         }
 
-        if (oldPassword === newPassword) {
-            return res.render('change-setting', { name: 'Password', id: 'password', user: req.session, error: 'New password must be different from old password' });
+        if (old_password === new_password) {
+            return res.render('change-setting', { name: 'Password', id: 'password', hide: true, user: req.session, error: 'New password must be different from old password' });
         }
 
-        if (!comparePassword(oldPassword, req.session.password)) {
-            return res.render('change-setting', { name: 'Password', id: 'password', user: req.session, error: 'Old password is incorrect' });
+        if (!comparePassword(old_password, req.session.password)) {
+            return res.render('change-setting', { name: 'Password', id: 'password', hide: true, user: req.session, error: 'Old password is incorrect' });
         }
-        
+
         // Validate password requirements
-        const validation = validatePassword(newPassword);
+        const validation = validatePassword(new_password);
         if (!validation.valid) {
             const errMessage = validation.errors.join(', ');
-            return res.render('change-setting', { name: 'Password', id: 'password', user: req.session, error: errMessage });
+            return res.render('change-setting', { name: 'Password', id: 'password', hide: true, user: req.session, error: errMessage });
         }
 
-        const passwordHash = await hashPassword(newPassword);
+        const passwordHash = await hashPassword(new_password);
             
         // Insert new user into database
-        const stmt = db.prepare('UPDATE users SET password = ? WHERE userID = ?');
+        const stmt = db.prepare('UPDATE users SET password = ? WHERE id = ?');
         const result = stmt.run(passwordHash, req.session.userId);
         
         req.session.destroy((err) => {
@@ -230,7 +231,7 @@ module.exports = () => {
     });
 
     router.get('/change-email', requireAuth, (req, res) => {
-        res.render('change-setting', { name: 'Email', id: 'email', user: req.session });
+        res.render('change-setting', { name: 'Email', id: 'email', hide: false, user: req.session });
     });
 
     router.post('/change-email', requireAuth, async (req, res) => {
@@ -238,7 +239,7 @@ module.exports = () => {
     });
 
     router.get('/change-display', requireAuth, (req, res) => {
-        res.render('change-setting', { name: 'Display Name', id: 'display', user: req.session });
+        res.render('change-setting', { name: 'Display Name', id: 'display', hide: false, user: req.session });
     });
 
     router.post('/change-display', requireAuth, async (req, res) => {

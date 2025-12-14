@@ -14,11 +14,19 @@
     <form method="POST" action="./change-{{id}}">
         <p>
             <label for="{{id}}">Old {{name}}:</label><br>
-            <input type="text" name="old{{name}}" required>
+            {{#if hide}}
+                <input type="password" name="old_{{id}}" required>
+            {{else}}
+                <input type="text" name="old_{{id}}" required>
+            {{/if}}
         </p>
         <p>
             <label for="{{id}}">New {{name}}:</label><br>
-            <input type="text" name="new{{name}}" required>
+            {{#if hide}}
+                <input type="password" name="new_{{id}}" required>
+            {{else}}
+                <input type="text" name="new_{{id}}" required>
+            {{/if}}
         </p>
         <p>
             <button class="themed-button" type="submit">Login</button>
