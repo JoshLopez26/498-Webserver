@@ -13,7 +13,7 @@ module.exports = () => {
     // Get user data if logged in, set as guest if else
     function getUser(req){
         let user = {  // Default Guest object
-            name: "Guest",
+            username: "Guest",
             isLoggedIn: false,
             loginTime: null,
             visitCount: 0
@@ -21,7 +21,7 @@ module.exports = () => {
 
         if (req.session && req.session.isLoggedIn) {
             user = {
-                name: req.session.username,
+                username: req.session.username,
                 isLoggedIn: true,
                 loginTime: req.session.loginTime,
                 visitCount: req.session.visitCount || 0
@@ -59,7 +59,7 @@ module.exports = () => {
             }
             
             // Find user by username
-            const user = db.prepare('SELECT * FROM users WHERE name = ?').get(username);
+            const user = db.prepare('SELECT * FROM users WHERE username = ?').get(username);
             
             if (!user) {
                 loginTracker.recordAttempt(ipAddress, username, false);
@@ -84,7 +84,7 @@ module.exports = () => {
 
             // Create session
             req.session.userId = user.id;
-            req.session.username = user.name;
+            req.session.username = user.username;
             req.session.isLoggedIn = true;
             
             // Redirect to success page
@@ -121,7 +121,7 @@ module.exports = () => {
             }
             
             // Check if username already exists
-            const existingUser = db.prepare('SELECT id FROM users WHERE name = ?').get(username);
+            const existingUser = db.prepare('SELECT id FROM users WHERE username = ?').get(username);
             if (existingUser) {
                 console.error('Error: Username already used');
                 return res.redirect('/');
@@ -142,7 +142,7 @@ module.exports = () => {
             const passwordHash = await hashPassword(password);
             
             // Insert new user into database
-            const stmt = db.prepare('INSERT INTO users (name, password, email, display_name) VALUES (?, ?, ?, ?)');
+            const stmt = db.prepare('INSERT INTO users (username, password, email, display_name) VALUES (?, ?, ?, ?)');
             const result = stmt.run(username, passwordHash, email, display);
             
             // Redirect to success page with username

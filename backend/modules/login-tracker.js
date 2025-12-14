@@ -3,7 +3,7 @@ const db = require('../database');
 
 // Configuration
 const MAX_ATTEMPTS = 5;           // Maximum failed attempts allowed
-const LOCKOUT_DURATION = 30000; // 15 minutes in milliseconds
+const LOCKOUT_DURATION = 1 * 60 * 1000; // 15 minutes in milliseconds
 
 // Records a login attempt
 function recordAttempt(ipAddress, username, success) {

@@ -11,7 +11,7 @@ db.pragma('foreign_keys = ON');
 db.exec(`
     CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT UNIQUE NOT NULL,
+        username TEXT UNIQUE NOT NULL,
         password TEXT NOT NULL,
         email TEXT UNIQUE NOT NULL, 
         display_name TEXT UNIQUE NOT NULL,
@@ -43,7 +43,7 @@ db.exec(`
     );
 
     CREATE INDEX IF NOT EXISTS idx_login_attempts_ip_username 
-    ON login_attempts(ip_address, username, attempt_time)
+    ON login_attempts(ip_address, username, attempt_time);
 `);
 
 module.exports = db;
