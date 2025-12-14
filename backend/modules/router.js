@@ -204,7 +204,9 @@ module.exports = () => {
             return res.render('change-setting', { name: 'Password', id: 'password', hide: true, user: req.session, error: 'New password must be different from old password' });
         }
 
-        if (!comparePassword(old_password, user.password)) {
+        const oldPasswordMatch = await comparePassword(old_password, user.password);
+        if (!oldPasswordMatch) {
+            console.log('Old password is incorrect');
             return res.render('change-setting', { name: 'Password', id: 'password', hide: true, user: req.session, error: 'Old password is incorrect' });
         }
 
@@ -217,7 +219,7 @@ module.exports = () => {
 
         const passwordHash = await hashPassword(new_password);
             
-        // Insert new user into database
+        // Update password in database
         const stmt = db.prepare('UPDATE users SET password = ? WHERE id = ?');
         const result = stmt.run(passwordHash, req.session.userId);
         
