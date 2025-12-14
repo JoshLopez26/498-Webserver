@@ -11,21 +11,9 @@ Due: Dec 19th, 11:59pm
     comment history.
 
 2 Core Requirements
-        
-    2.3 User Authentication and Security
-        2.3.3 User Fields
-            - Display names should be shown in comments and user profiles instead of usernames. If
-              a user changes their display name, all comments made by that user should be updated
-              to show the new display name.
-
     2.4 User Profile Page
     Create a user profile page accessible to logged-in users with the following features:
         2.4.1 Account Management
-            - Change Password:
-                – Require current password verification
-                – Validate new password meets strength requirements
-                – Hash new password before storing
-                – Invalidate all existing sessions after password change (force re-login)
             - Change Email:
                 – Require current password verification
                 – Validate new email format and uniqueness

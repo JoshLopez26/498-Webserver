@@ -84,6 +84,7 @@ module.exports = () => {
     router.post('/register', async (req, res) => {
         //const username = req.body.username;
         try {
+            req.body.email = req.body.email.toLowerCase();
             const { username, password, email, display } = req.body;
             
             // Validate input
@@ -206,7 +207,6 @@ module.exports = () => {
 
         const oldPasswordMatch = await comparePassword(old_password, user.password);
         if (!oldPasswordMatch) {
-            console.log('Old password is incorrect');
             return res.render('change-setting', { name: 'Password', id: 'password', hide: true, user: req.session, error: 'Old password is incorrect' });
         }
 
@@ -233,10 +233,37 @@ module.exports = () => {
     });
 
     router.get('/change-email', requireAuth, (req, res) => {
-        res.render('change-setting', { name: 'Email', id: 'email', hide: false, user: req.session });
+        res.render('change-setting', { name: 'Email', id: 'email', hide: false, auth: true, user: req.session });
     });
 
     router.post('/change-email', requireAuth, async (req, res) => {
+        req.body.new_email = req.body.new_email.toLowerCase();
+        req.body.old_email = req.body.old_email.toLowerCase();
+        const { old_email, new_email, auth_password } = req.body;
+        const user = db.prepare('SELECT * FROM users WHERE id = ?').get(req.session.userId);
+
+        let settings = { name: 'Email', id: 'email', hide: false, auth: true, user: req.session };
+        if  (!old_email || !new_email || !auth_password) {
+            settings.error = 'Missing one or more fields';
+            return res.render('change-setting', settings);
+        }
+
+        const oldPasswordMatch = await comparePassword(auth_password, user.password);
+        if (!oldPasswordMatch) {
+            settings.error = 'Password is incorrect';
+            return res.render('change-setting', settings);
+        }
+
+        //https://www.geeksforgeeks.org/javascript/javascript-program-to-validate-an-email-address/
+        const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!pattern.test(new_email)) {
+            settings.error = 'Invalid email format';
+            return res.render('change-setting', settings);
+        }
+
+        //Email Successfully changed
+        db.prepare('UPDATE users SET email = ? WHERE id = ?').run(new_email, req.session.userId);
+        
         res.render('profile', {user: req.session});
     });
 

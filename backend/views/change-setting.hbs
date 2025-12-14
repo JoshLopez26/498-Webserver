@@ -12,6 +12,12 @@
     {{/if}}
     <!-- Input field to change profile setting -->
     <form method="POST" action="./change-{{id}}">
+        {{#if auth}}
+            <p>
+                <label for="auth_password">Password:</label><br>
+                <input type="password" name="auth_password" required>
+            </p>
+        {{/if}}
         <p>
             <label for="{{id}}">Old {{name}}:</label><br>
             {{#if hide}}
@@ -30,7 +36,7 @@
         </p>
         <p>
             <button class="themed-button" type="submit">Login</button>
-            <a href="/">Cancel</a>
+            <a href="/profile">Cancel</a>
         </p>
     </form>
 </body>
