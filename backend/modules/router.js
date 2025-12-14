@@ -178,24 +178,13 @@ module.exports = () => {
         res.render('comment/new');
     });
 
-    //Logout user
-    router.get('/logout', (req, res) => {
-        req.session.destroy((err) => {
-            if (err) {
-                console.error('Logout error:', err);
-                return res.redirect('/public/error.html?message=' + encodeURIComponent('An error occurred while logging out.') + '&back=/');
-            }
-            res.redirect('/public/logged-out.html');
-        });
-    });
-
     router.post('/logout', (req, res) => {
         req.session.destroy((err) => {
             if (err) {
                 console.error('Logout error:', err);
                 return res.status(500).json({ error: 'Error logging out' });
             }
-            res.json({ message: 'Logged out successfully' });
+            res.render('home', { message: 'Logged out successfully' });
         });
     });
 

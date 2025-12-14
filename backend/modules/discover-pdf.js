@@ -6,26 +6,6 @@ const router = express.Router();
 const fs = require('fs');
 const path = require('path');
 
-// Build user object from session so templates know login state
-function getUser(req) {
-    let user = {
-        name: 'Guest',
-        isLoggedIn: false,
-        loginTime: null,
-        visitCount: 0
-    };
-    if (req.session && req.session.isLoggedIn) {
-        user = {
-            name: req.session.username,
-            isLoggedIn: true,
-            loginTime: req.session.loginTime,
-            visitCount: req.session.visitCount || 0
-        };
-        req.session.visitCount = (req.session.visitCount || 0) + 1;
-    }
-    return user;
-}
-
 router.get('/', (req, res) => {
     const pdfsDir = path.join(__dirname, '..', 'pdfs');
     fs.readdir(pdfsDir, (err, files) => {
@@ -38,11 +18,9 @@ router.get('/', (req, res) => {
         const pdfs = [];
         let readCount = 0;
 
-        const user = getUser(req);
-
         // Render page if list is empty
         if (jsonFiles.length === 0) {
-            return res.render('pdf', { pdfs: [] , user });
+            return res.render('pdf', { pdfs: [] , user: req.session });
         }
 
         // For each JSON file, read its data then after all data is stored, render page
@@ -60,7 +38,7 @@ router.get('/', (req, res) => {
                 }
                 // Render after all files processed
                 if (readCount === jsonFiles.length) {
-                    res.render('pdf', { pdfs, user });
+                    res.render('pdf', { pdfs: pdfs, user: req.session });
                 }
             });
         });

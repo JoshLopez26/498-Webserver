@@ -11,31 +11,12 @@ Due: Dec 19th, 11:59pm
     comment history.
 
 2 Core Requirements
-
-    2.1 Database Migration
-        - Migrate all data from in-memory storage to SQLite3 database
-        - Include database connection handling and error management
         
     2.3 User Authentication and Security
-        2.3.1 Password Security
-            - Hash all passwords using a secure hashing algorithm (argon2)
-            - Never store plaintext passwords
-            - Implement password strength requirements (minimum length, complexity)
-            - Validate password requirements on registration and password changes
-        2.3.2 Account Lockout
-            - Track login attempts in the database
-            - Implement account lockout after a specified number of failed attempts (e.g., 5 failed attempts)
-            - Lock accounts for a specified duration (e.g., 15 minutes)
-            - Display appropriate error messages when accounts are locked
-            - Log all login attempts (successful and failed) with IP addresses and timestamps
         2.3.3 User Fields
-            - Add email field to user accounts (required, must be unique)
-            - Add display name field to user accounts (required, needs to be different from username)
             - Display names should be shown in comments and user profiles instead of usernames. If
               a user changes their display name, all comments made by that user should be updated
               to show the new display name.
-            - Usernames remain for login purposes and should be unique.
-            - Validate email format on registration and updates.
 
     2.4 User Profile Page
     Create a user profile page accessible to logged-in users with the following features:
