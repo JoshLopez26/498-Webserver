@@ -117,7 +117,7 @@ module.exports = () => {
             // Validate password requirements
             const validation = validatePassword(password);
             if (!validation.valid) {
-                const errMessage = 'Error: ' + validation.message;
+                const errMessage = validation.errors.join(', ');
                 return res.redirect('/register?error=' + encodeURIComponent(errMessage));
             }
             
@@ -164,7 +164,7 @@ module.exports = () => {
         if(req.session && req.session.isLoggedIn){
             commentList = loadComments();
         }
-        res.render('comments', {user: getUser(req), commentList});
+        res.render('comments', {user: getUser(req), comments: commentList});
     });
 
     // Handle new comment
@@ -178,7 +178,7 @@ module.exports = () => {
             .run(req.session.userId, comment);
             console.log(`Sent comment: ${comment}`);
             const commentList = loadComments();
-            res.render('comments', {user, commentList});
+            res.render('comments', {user: user, comments: commentList});
         }
         else
         {
