@@ -3,7 +3,7 @@ const db = require('../database');
 const argon2 = require('argon2');
 const { validatePassword, hashPassword, comparePassword } = require('./password-utils')
 
-module.exports = (users, comments) => {
+module.exports = () => {
     const router = express.Router();
 
     router.use(express.json()); // Parse JSON bodies
@@ -64,14 +64,20 @@ module.exports = (users, comments) => {
             const passwordMatch = await comparePassword(password, user.password);
             
             if (!passwordMatch) {
-                console.error('Error: Incorect password');
+                user.login_attempts += 1;
+                db.prepare('UPDATE login_attempts SET attempts = ? WHERE id = ?')
+                .run(user.login_attempts, user.id);
+                console.error('Error: Incorect password, Login attempts: ' + user.login_attempts);
                 return res.redirect('/');
            }
             
             // Successful login - update last login time
-            db.prepare('UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = ?')
+            db.prepare('UPDATE users SET last_login = CURRENT_TIMESTAMP, login_attempts = 0 WHERE id = ?')
             .run(user.id);
             
+           console.log(`Password ${user.password}`);
+           console.log(`Login attempts: ${user.login_attempts}`);
+
             // Create session
             req.session.userId = user.id;
             req.session.username = user.name;
@@ -145,12 +151,15 @@ module.exports = (users, comments) => {
         }
     });
 
+    function loadComments() {
+        return db.prepare('SELECT comments.text, comments.created_at, users.display_name FROM comments JOIN users ON comments.user_id = users.id ORDER BY comments.created_at DESC').all();
+    }
+
     // Render Comments page
     router.get('/comments', (req, res) => {
         if(req.session && req.session.isLoggedIn){
-            const comments = db.prepare('SELECT comments.text, comments.created_at, users.display_name FROM comments JOIN users ON comments.user_id = users.id ORDER BY comments.created_at DESC').all();
-            console.log(comments);
-            res.render('comments', {user: getUser(req), comments});
+            const commentList = loadComments();
+            res.render('comments', {user: getUser(req), commentList});
         }
     });
 
@@ -164,27 +173,13 @@ module.exports = (users, comments) => {
             db.prepare('INSERT INTO comments (user_id, text) VALUES (?, ?)')
             .run(req.session.userId, comment);
             console.log(`Sent comment: ${comment}`);
+            const commentList = loadComments();
+            res.render('comments', {user, commentList});
         }
         else
         {
             return res.send("Can't submit empty comment or user not logged in.");
         }
-
-        /*
-
-        if (comment) {
-            const commentObj = {
-                author: req.session.username,
-                comment: comment,
-                createdAt: new Date()
-            };
-            comments.push(commentObj);
-            console.log(`Sent comment: ${comment}`);
-        } else {
-            return res.send("Can't submit empty comment.");
-        }*/
-
-        res.render('comments', {user, comments});
     });
 
     // Add comment form

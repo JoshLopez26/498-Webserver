@@ -42,7 +42,7 @@ app.use(session({
 }));
 
 // Handle routes through router module
-const router = require('./modules/router')(users, comments);
+const router = require('./modules/router');
 app.use('/', router);
 
 app.listen(PORT, () => {

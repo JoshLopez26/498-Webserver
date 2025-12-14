@@ -39,6 +39,7 @@ db.exec(`
         username TEXT,  
         ip TEXT,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        attempts INTEGER DEFAULT 0,
         success INTEGER NOT NULL
     );
 `);
