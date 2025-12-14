@@ -254,6 +254,16 @@ module.exports = () => {
             return res.render('change-setting', settings);
         }
 
+        if (old_email !== user.email) {
+            settings.error = 'Old email does not match current email';
+            return res.render('change-setting', settings);
+        }
+
+        if (old_email === new_email) {
+            settings.error = 'New email must be different from old email';
+            return res.render('change-setting', settings);
+        }
+
         //https://www.geeksforgeeks.org/javascript/javascript-program-to-validate-an-email-address/
         const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!pattern.test(new_email)) {
@@ -263,7 +273,7 @@ module.exports = () => {
 
         //Email Successfully changed
         db.prepare('UPDATE users SET email = ? WHERE id = ?').run(new_email, req.session.userId);
-        
+
         res.render('profile', {user: req.session});
     });
 
@@ -272,6 +282,46 @@ module.exports = () => {
     });
 
     router.post('/change-display', requireAuth, async (req, res) => {
+        const { old_display, new_display } = req.body;
+        const user = db.prepare('SELECT * FROM users WHERE id = ?').get(req.session.userId);
+        let settings = { name: 'Display Name', id: 'display', hide: false, user: req.session };
+
+        if  (!old_display || !new_display) {
+            settings.error = 'Missing old or new display name';
+            return res.render('change-setting', settings);
+        }
+
+        if (old_display !== user.display_name) {
+            settings.error = 'Old display name does not match current display name';
+            return res.render('change-setting', settings);
+        }
+
+        if (old_display === new_display) {
+            settings.error = 'New display name must be different from old display name';
+            return res.render('change-setting', settings);
+        }
+
+        const existingDisplay = db.prepare('SELECT id FROM users WHERE display_name = ?').get(new_display);
+        if (existingDisplay) {
+            settings.error = 'Display name already in use';
+            return res.render('change-setting', settings);
+        }
+
+        const pattern = /^[A-Za-z0-9_]+$/;
+        if (!pattern.test(new_display)) {
+            settings.error = 'Invalid display name, must be alphanumeric characters or underscores only';
+            return res.render('change-setting', settings);
+        }
+        
+        if (new_display.length > 32) {
+            settings.error = 'Display name too long, must be 32 characters or less';
+            return res.render('change-setting', settings);
+        }
+
+        //Display Name Successfully changed
+        db.prepare('UPDATE users SET display_name = ? WHERE id = ?').run(new_display, req.session.userId);
+        req.session.display_name = new_display;
+
         res.render('profile', {user: req.session});
     });
 
