@@ -15,8 +15,6 @@ Due: Dec 19th, 11:59pm
     Create a user profile page accessible to logged-in users with the following features:
         2.4.1 Account Management
             - Change Email:
-                – Require current password verification
-                – Validate new email format and uniqueness
                 – Send confirmation email to new address (optional but recommended)
             - Change Display Name:
                 – Allow users to update their display name

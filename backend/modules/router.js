@@ -63,6 +63,7 @@ module.exports = () => {
             req.session.username = user.username;
             req.session.display_name = user.display_name;
             req.session.isLoggedIn = true;
+            req.session.name_color = user.name_color;
             
             // Redirect to success page
             res.redirect(`/`);
@@ -139,13 +140,12 @@ module.exports = () => {
     });
 
     function loadComments() {
-        return db.prepare('SELECT comments.text, comments.created_at, users.display_name FROM comments JOIN users ON comments.user_id = users.id ORDER BY comments.created_at DESC').all();
+        return db.prepare('SELECT comments.text, comments.created_at, users.display_name, users.name_color FROM comments JOIN users ON comments.user_id = users.id ORDER BY comments.created_at DESC').all();
     }
 
     router.get('/profile', (req, res) => {
         res.render('profile', {user: req.session});
     });
-            //const user = db.prepare('SELECT username, email, display_name, name_color, last_login FROM users WHERE id = ?').get(req.session.userId);
 
     // Render Comments page
     router.get('/comments', (req, res) => {
@@ -264,6 +264,12 @@ module.exports = () => {
             return res.render('change-setting', settings);
         }
 
+        const existingEmail = db.prepare('SELECT id FROM users WHERE email = ?').get(new_email);
+        if (existingEmail) {
+            settings.error = 'Email already in use';
+            return res.render('change-setting', settings);
+        }
+
         //https://www.geeksforgeeks.org/javascript/javascript-program-to-validate-an-email-address/
         const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!pattern.test(new_email)) {
@@ -313,8 +319,8 @@ module.exports = () => {
             return res.render('change-setting', settings);
         }
         
-        if (new_display.length > 32) {
-            settings.error = 'Display name too long, must be 32 characters or less';
+        if (new_display.length < 4 || new_display.length > 32) {
+            settings.error = 'Display name too long, must be between 4 and 32 characters';
             return res.render('change-setting', settings);
         }
 
@@ -322,6 +328,24 @@ module.exports = () => {
         db.prepare('UPDATE users SET display_name = ? WHERE id = ?').run(new_display, req.session.userId);
         req.session.display_name = new_display;
 
+        res.render('profile', {user: req.session});
+    });
+
+    router.post('/change-name-color', requireAuth, (req, res) => {
+        const { name_color } = req.body;
+        const hexColor = "#" + name_color;
+
+        const pattern = /^([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/;
+
+        if (!pattern.test(name_color)) {
+            settings.error = 'Invalid input, must be a hex color code (No # symbol)';
+            return res.render('change-setting', settings);
+        }
+
+
+        //Update successful
+        db.prepare('UPDATE users SET name_color = ? WHERE id = ?').run(name_color, req.session.userId);
+        req.session.name_color = name_color;
         res.render('profile', {user: req.session});
     });
 

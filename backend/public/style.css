@@ -33,7 +33,7 @@ a, a:hover, a:after, a:hover::after
 	color: rgb(203, 203, 226)
 }
 
-.comment-author{
+#comment-author{
 	font-size: 15pt;
 }
 
@@ -62,3 +62,7 @@ a, a:hover, a:after, a:hover::after
 }
 
 .themed-form { display: inline; }
+
+.user-display-name {
+	color: white;
+}

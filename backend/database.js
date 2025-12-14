@@ -15,7 +15,7 @@ db.exec(`
         password TEXT NOT NULL,
         email TEXT UNIQUE NOT NULL, 
         display_name TEXT UNIQUE NOT NULL,
-        name_color TEXT DEFAULT 'ffffff',
+        name_color TEXT DEFAULT '#ffffff',
         last_login DATETIME
     );
 

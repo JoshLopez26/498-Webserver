@@ -10,12 +10,12 @@
     {{> navbar}}
 
     <!-- Display online status of the user -->
-    <h2> Profile Settings:</h2>
-    <div class="profile-settings">
-        <p>
-            {{user.display_name}}<br>
+    <h2> Profile Settings (<span style="#{{user.name_color}}">{{user.display_name}}</span>): </h2>
+    <div class="profile-settings"> 
+        <p> 
             <label for="name-color">Name Color:</label><br>
             <input type="text" name="name-color">
+            <a href="/change-name-color">Apply</a>
         </p>
         <form class="themed-form" action="/change-password" method="GET">
             <button class="themed-button" type="submit">Change Password</button>
