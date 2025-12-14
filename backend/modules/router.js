@@ -63,8 +63,7 @@ module.exports = () => {
             
             if (!user) {
                 loginTracker.recordAttempt(ipAddress, username, false);
-                console.error('Error: User not found');
-                return res.redirect('/');
+                return res.render('error', { message: 'User not found.' });
             }
             
             // Compare entered password with stored hash
@@ -85,6 +84,7 @@ module.exports = () => {
             // Create session
             req.session.userId = user.id;
             req.session.username = user.username;
+            req.session.display_name = user.display_name;
             req.session.isLoggedIn = true;
             
             // Redirect to success page
