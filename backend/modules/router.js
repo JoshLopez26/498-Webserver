@@ -40,7 +40,9 @@ module.exports = () => {
 
     // Render Login page
     router.get('/login', (req, res) => {
-        res.render('login');
+        res.render('login', {
+            error: req.query.error
+        });
     });
 
     // Handle login form submission
@@ -96,7 +98,9 @@ module.exports = () => {
 
     // Render Register page
     router.get('/register', (req, res) => {
-        res.render('register');
+        res.render('register', {
+            error: req.query.error
+        });
     });
 
     // Handle register form submission
