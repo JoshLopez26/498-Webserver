@@ -26,6 +26,26 @@ module.exports = () => {
         res.render('home', { user: req.session });
     });
 
+    router.post('/test', async (req, res) => {
+        const recipient = 'bogobitgames@gmail.com';
+        const subject = 'Test Email from Node.js';
+        const text = 'This is a test email sent from a Node.js script!';
+        
+        console.log('Sending email...');
+        console.log(`To: ${recipient}`);
+        console.log(`Subject: ${subject}`);
+        
+        const result = await sendEmail(recipient, subject, text);
+        
+        if (result.success) {
+            console.log('Email sent successfully!');
+            console.log(`Message ID: ${result.messageId}`);
+        } else {
+            console.error('Failed to send email:', result.error);
+            process.exit(1);
+        }
+    });
+
     // Render Login page
     router.get('/login', (req, res) => {
         res.render('login', {
