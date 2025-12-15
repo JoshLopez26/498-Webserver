@@ -5,11 +5,19 @@ const nodemailer = require('nodemailer');
 // We'll use environment variables for sensitive information
 // These will be loaded from .env file using node --env-file=.env
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false, // STARTTLS
     auth: {
-        user: process.env.GMAIL_USER,        // Your Gmail address
-        pass: process.env.GMAIL_APP_PASSWORD // Your App Password (16 characters, no spaces)
-    }
+        user: process.env.GMAIL_USER,         // your Gmail address
+        pass: process.env.GMAIL_APP_PASSWORD  // Gmail App Password
+    },
+    tls: {
+        // Do not allow invalid certs in production
+        rejectUnauthorized: true
+    },
+    pool: true,             // reuse connections for multiple emails
+    maxConnections: 5      // limit concurrent connections
 });
 
 // What is a transporter?
