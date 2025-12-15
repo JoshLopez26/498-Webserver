@@ -19,6 +19,9 @@ module.exports = () => {
             console.error('Make sure you have a .env file and run: node --env-file=.env send-email.js');
             process.exit(1);
         }
+        else{
+            console.log('GMAIL_USER and GMAIL_APP_PASSWORD environment variables are set.');
+        }
 
         res.render('home', { user: req.session });
     });
