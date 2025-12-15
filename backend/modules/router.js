@@ -4,6 +4,7 @@ const argon2 = require('argon2');
 const { validatePassword, hashPassword, comparePassword } = require('./password-utils')
 const loginTracker = require('./login-tracker');
 const { requireAuth, checkLoginLockout, getClientIP } = require('./auth-middleware');
+const { sendEmail } = require('./email');
 
 module.exports = () => {
     const router = express.Router();
@@ -272,6 +273,17 @@ module.exports = () => {
         if (!pattern.test(new_email)) {
             settings.error = 'Invalid email format';
             return res.render('change-setting', settings);
+        }
+
+        const subject = 'Email Change Successful';
+        const text = `Hello ${user.display_name},\n\nYour email has been successfully changed to ${new_email}.`;
+        const result = await sendEmail(new_email, subject, text);
+        if (result.success) {
+            console.log('Email sent successfully!');
+            console.log(`Message ID: ${result.messageId}`);
+        } else {
+            console.error('Failed to send email:', result.error);
+            process.exit(1);
         }
 
         //Email Successfully changed

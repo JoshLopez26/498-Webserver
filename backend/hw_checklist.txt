@@ -16,14 +16,6 @@ Due: Dec 19th, 11:59pm
         2.4.1 Account Management
             - Change Email:
                 – Send confirmation email to new address (optional but recommended)
-        2.4.2 Profile Customization
-        - Allow users to customize their public profile appearance (pick one or more):
-            – Profile name color (choose from predefined colors or hex codes)
-            – Profile icon/avatar (upload image or select from predefined icons)
-            – Other customization options (theme preference, bio, etc.)
-        - Display customizations in comments and user profiles
-        - Store customization data in the database
-        - Validate and sanitize user inputs for customization
 
     2.5 Password Recovery System
         - Implement “Forgot Password” functionality:
