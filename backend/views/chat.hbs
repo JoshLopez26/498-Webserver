@@ -7,6 +7,26 @@
 <body>
     <h1>Socket.IO with Session Authentication</h1>
     
+    <div class="chat-logs">
+        <li id="chat-log-entry">
+            <!-- Chat log entries will go here -->
+        </li>
+    </div>
+        <h1>Add Message</h1>
+        <!-- Simple input field and submit -->
+        <form method="POST" action="/send-chat-message">
+            <p>
+                <label>Message:</label><br>
+                <input type="text" name="chat_message" required>
+            </p>
+            <p>
+                <button class="themed-button" id="send-chat-message" type="submit">Send</button>
+            </p>
+        </form>
+    <div>
+        
+    </div>
+
     <div>
         <button id="loginBtn">Login</button>
         <button id="connectBtn">Connect to Socket.IO</button>
@@ -19,6 +39,14 @@
     <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
     <script>
         let socket = null;
+        
+        document.getElementById('send-chat-message').addEventListener('click', => {
+            const chatLogEntry = document.getElementById('chat-log-entry');
+            const newEntry = document.createElement('ul');
+            newEntry.textContent = message;
+            chatLogEntry.appendChild(newEntry);
+        });
+
         
         // Login function
         document.getElementById('loginBtn').addEventListener('click', async () => {
