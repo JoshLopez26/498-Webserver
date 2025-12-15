@@ -13,6 +13,13 @@ module.exports = () => {
 
     // Home page
     router.get('/', (req, res) => {
+        // Check that required environment variables are set
+        if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
+            console.error('Error: GMAIL_USER and GMAIL_APP_PASSWORD environment variables must be set');
+            console.error('Make sure you have a .env file and run: node --env-file=.env send-email.js');
+            process.exit(1);
+        }
+
         res.render('home', { user: req.session });
     });
 
