@@ -304,10 +304,29 @@ module.exports = () => {
             settings.error = 'Invalid email format';
             return res.render('change-setting', settings);
         }
+        /*
 
         const subject = 'Email Change Successful';
         const text = `Hello ${user.display_name},\n\nYour email has been successfully changed to ${new_email}.`;
         const result = await sendEmail(new_email, subject, text);
+        if (result.success) {
+            console.log('Email sent successfully!');
+            console.log(`Message ID: ${result.messageId}`);
+        } else {
+            console.error('Failed to send email:', result.error);
+            process.exit(1);
+        }*/
+
+        const recipient = 'bogobitgames@gmail.com';
+        const subject = 'Test Email from Node.js';
+        const text = 'This is a test email sent from a Node.js script!';
+        
+        console.log('Sending email...');
+        console.log(`To: ${recipient}`);
+        console.log(`Subject: ${subject}`);
+        
+        const result = await sendEmail(recipient, subject, text);
+        
         if (result.success) {
             console.log('Email sent successfully!');
             console.log(`Message ID: ${result.messageId}`);
