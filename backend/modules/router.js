@@ -277,19 +277,18 @@ module.exports = () => {
 
         const subject = 'Email Change Successful';
         const text = `Hello ${user.display_name},\n\nYour email has been successfully changed to ${new_email}.`;
-        const result = await sendEmail(new_email, subject, text);
-        if (result.success) {
-            console.log('Email sent successfully!');
-            console.log(`Message ID: ${result.messageId}`);
-        } else {
-            console.error('Failed to send email:', result.error);
-            process.exit(1);
-        }
 
         //Email Successfully changed
         db.prepare('UPDATE users SET email = ? WHERE id = ?').run(new_email, req.session.userId);
 
         res.render('profile', {user: req.session});
+
+        // Send email in background
+        sendEmail(new_email, subject, text)
+            .then(result => {
+                if (!result.success) console.error('Failed to send email:', result.error);
+                else console.log('Notification email sent for email change.');
+            });
     });
 
     router.get('/change-display', requireAuth, (req, res) => {
