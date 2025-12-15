@@ -6,6 +6,7 @@ const loginTracker = require('./login-tracker');
 const { requireAuth, checkLoginLockout, getClientIP } = require('./auth-middleware');
 const { sendEmail } = require('./email');
 
+
 module.exports = () => {
     const router = express.Router();
 
@@ -304,8 +305,9 @@ module.exports = () => {
             settings.error = 'Invalid email format';
             return res.render('change-setting', settings);
         }
-        /*
+/////////////// EMAIL SYSTEM TESTING //////////////////
 
+        /*
         const subject = 'Email Change Successful';
         const text = `Hello ${user.display_name},\n\nYour email has been successfully changed to ${new_email}.`;
         const result = await sendEmail(new_email, subject, text);
@@ -317,6 +319,7 @@ module.exports = () => {
             process.exit(1);
         }*/
 
+        /*
         const recipient = 'bogobitgames@gmail.com';
         const subject = 'Test Email from Node.js';
         const text = 'This is a test email sent from a Node.js script!';
@@ -333,7 +336,7 @@ module.exports = () => {
         } else {
             console.error('Failed to send email:', result.error);
             process.exit(1);
-        }
+        }*/
 
         //Email Successfully changed
         db.prepare('UPDATE users SET email = ? WHERE id = ?').run(new_email, req.session.userId);
@@ -401,6 +404,10 @@ module.exports = () => {
         db.prepare('UPDATE users SET name_color = ? WHERE id = ?').run(name_color, req.session.userId);
         req.session.name_color = name_color;
         res.render('profile', {user: req.session});
+    });
+
+    router.get('/chat', requireAuth, (req, res) => {
+        res.render('chat', {user: req.session});
     });
 
     // Route to discover-pdf module

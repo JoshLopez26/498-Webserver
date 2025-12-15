@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Socket.IO with Sessions</title>
+</head>
+<body>
+    <h1>Socket.IO with Session Authentication</h1>
+    
+    <div>
+        <button id="loginBtn">Login</button>
+        <button id="connectBtn">Connect to Socket.IO</button>
+        <button id="requestDataBtn">Request Data</button>
+    </div>
+    
+    <div id="status">Not connected</div>
+    <div id="response"></div>
+
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+    <script>
+        let socket = null;
+        
+        // Login function
+        document.getElementById('loginBtn').addEventListener('click', async () => {
+            const response = await fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include', // Important: include cookies
+                body: JSON.stringify({
+                    username: 'testuser',
+                    password: 'password123'
+                })
+            });
+            
+            const data = await response.json();
+            document.getElementById('status').textContent = data.message;
+        });
+        
+        // Connect to Socket.IO with credentials
+        document.getElementById('connectBtn').addEventListener('click', () => {
+            // Important: Set withCredentials to true so cookies are sent
+            socket = io('https://bogobit.org', { // CHANGE THIS TO YOUR URL
+                withCredentials: true
+            });
+            
+            socket.on('connect', () => {
+                document.getElementById('status').textContent = 'Connected!';
+            });
+            
+            socket.on('error', (error) => {
+                document.getElementById('status').textContent = 'Error: ' + error.message;
+            });
+            
+            socket.on('response', (data) => {
+                document.getElementById('response').innerHTML = 
+                    '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            });
+        });
+        
+        // Request data
+        document.getElementById('requestDataBtn').addEventListener('click', () => {
+            if (socket) {
+                socket.emit('requestData', {
+                    message: 'Hello from client!'
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -78,6 +78,9 @@
 			<button type="submit">Documents</button>
 		</form> |
 		{{#if user.isLoggedIn}}
+			<form action="/chat" method="GET">
+				<button type="submit">Chatroom</button>
+			</form>	
 			<form action="/logout" method="POST">
 				<button type="submit">Logout</button>
 			</form>			
