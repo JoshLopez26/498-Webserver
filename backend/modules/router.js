@@ -340,8 +340,10 @@ module.exports = () => {
         }
 
         //Update successful
+        console.log(`Changing name color to: ${name_color}`);
         db.prepare('UPDATE users SET name_color = ? WHERE id = ?').run(name_color, req.session.userId);
         req.session.name_color = name_color;
+        console.log(`Session name color updated to: ${req.session.name_color}`);
         res.render('profile', {user: req.session});
     });
 
