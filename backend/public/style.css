@@ -62,7 +62,3 @@ a, a:hover, a:after, a:hover::after
 }
 
 .themed-form { display: inline; }
-
-.user-display-name {
-	color: white;
-}
