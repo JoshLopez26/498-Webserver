@@ -7,6 +7,8 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3000
+    volumes:
+      - ./backend/.env:/app/.env:ro
     networks:
       - app-network
 
