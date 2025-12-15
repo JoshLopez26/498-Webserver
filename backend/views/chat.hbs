@@ -16,7 +16,7 @@
     </div>
 
     <div>
-        <h1>Add Message</h1>
+        <h3>Add Message</h3>
         <!-- Simple input field and submit -->
         <p>
             <label>Message:</label><br>
@@ -80,7 +80,7 @@
             chatLogEntry.appendChild(newEntry);
         });
 
-        // Handle button click
+        /* Handle button click
         const button = document.getElementById('requestData');
         button.addEventListener('click', () => {
             console.log('Requesting data from server...');
@@ -91,7 +91,7 @@
                 timestamp: new Date().toISOString(),
                 clientId: socket.id
             });
-        });
+        });*/
 
         document.getElementById('send-chat-message').addEventListener('click', () => {
             console.log('Sending chat message...');
