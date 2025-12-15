@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="icon" href="/images/favicon.png" type="image/x-icon">
     <title>Socket.IO with Sessions</title>
 </head>
 <body>
@@ -12,6 +14,8 @@
             <!-- Chat log entries will go here -->
         </li>
     </div>
+
+    <div>
         <h1>Add Message</h1>
         <!-- Simple input field and submit -->
         <p>
@@ -21,8 +25,6 @@
         <p>
             <button class="themed-button" id="send-chat-message" type="button">Send</button>
         </p>
-    <div>
-        
     </div>
 
     <div>
@@ -39,7 +41,7 @@
         //let socket = null;
         
         // Connect to the Socket.IO server
-        const socket = io('https://bogobit.org', {
+        const socket = io({
             withCredentials: true
         });
 
