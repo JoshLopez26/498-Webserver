@@ -4,7 +4,6 @@ const SQLiteStore = require('./sqlite-session-store');
 const app = express();
 const path = require('path');
 const hbs = require('hbs');
-const cookieParser = require('cookie-parser');
 const PORT = process.env.PORT || 3000;
 const http = require('http');
 const { Server } = require('socket.io');
