@@ -16,10 +16,6 @@ Due: Dec 19th, 11:59pm
         2.4.1 Account Management
             - Change Email:
                 – Send confirmation email to new address (optional but recommended)
-            - Change Display Name:
-                – Allow users to update their display name
-                – Validate display name (length, allowed characters)
-                – Update display name across all existing comments (or maintain historical display names)
         2.4.2 Profile Customization
         - Allow users to customize their public profile appearance (pick one or more):
             – Profile name color (choose from predefined colors or hex codes)

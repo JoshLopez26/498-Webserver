@@ -16,17 +16,16 @@
             <p class="error-message">{{error}}</p>
         {{/if}}
         <form class="themed-form" action="/change-name-color" method="POST">
-        <p>User color: {{user.name_color}}</p>
             <label for="name-color">Name Color:</label><br>
             <input type="text" id="name-color" name="name_color">
             <button class="themed-button" type="submit">Apply</button>
-        </form><br>
+        </form><br><br>
         <form class="themed-form" action="/change-password" method="GET">
             <button class="themed-button" type="submit">Change Password</button>
-        </form>
+        </form><br>
         <form class="themed-form" action="/change-email" method="GET">
             <button class="themed-button" type="submit">Change Email</button>
-        </form>
+        </form><br>
         <form class="themed-form" action="/change-display" method="GET">
             <button class="themed-button" type="submit">Change Display Name</button>
         </form>

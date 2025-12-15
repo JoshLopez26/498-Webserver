@@ -56,8 +56,6 @@ module.exports = () => {
             db.prepare('UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = ?')
             .run(user.id);
             
-            console.log(`Password ${user.password}`);
-
             // Create session
             req.session.userId = user.id;
             req.session.username = user.username;
@@ -164,7 +162,6 @@ module.exports = () => {
         {
             db.prepare('INSERT INTO comments (user_id, text) VALUES (?, ?)')
             .run(req.session.userId, comment);
-            console.log(`Sent comment: ${comment}`);
             const commentList = loadComments();
             res.render('comments', {user: req.session, comments: commentList});
         }
@@ -340,10 +337,8 @@ module.exports = () => {
         }
 
         //Update successful
-        console.log(`Changing name color to: ${name_color}`);
         db.prepare('UPDATE users SET name_color = ? WHERE id = ?').run(name_color, req.session.userId);
         req.session.name_color = name_color;
-        console.log(`Session name color updated to: ${req.session.name_color}`);
         res.render('profile', {user: req.session});
     });
 
