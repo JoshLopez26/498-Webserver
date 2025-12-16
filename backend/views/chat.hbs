@@ -6,7 +6,7 @@
     <link rel="icon" href="/images/favicon.png" type="image/x-icon">
     <title>Socket.IO with Sessions</title>
 </head>
-<body data-user-id="{{user}}" data-messages="{{messages}}">
+<body data-user-id="{{user}}">
     <h1>Socket.IO with Session Authentication</h1>
     
     <div class="chat-logs">
@@ -41,6 +41,7 @@
 
         function createComment(id, text, created_at, name, color)
         {
+            /*
             // <li>
             const li = document.getElementById('chat-log-entry').appendChild('li');
 
@@ -72,15 +73,13 @@
             // Assemble
             p.appendChild(strong);
             p.appendChild(div);
-            li.appendChild(p);
-
-/*
-            // Append to chat log
+            li.appendChild(p);*/
+            
             document.getElementById('chat-log-entry').appendChild(li);
             const chatLogEntry = document.getElementById('chat-log-entry');
             const newEntry = document.createElement('li');
-            newEntry.textContent = message.text;
-            chatLogEntry.appendChild(newEntry);*/
+            newEntry.textContent = text;
+            chatLogEntry.appendChild(newEntry);
         }
 
         function setupSocketHandlers() {
