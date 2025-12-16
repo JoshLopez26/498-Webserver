@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 3000;
 const http = require('http');
 const { Server } = require('socket.io');
 const server = http.createServer(app);
-
+const db = require('./database'); 
 
 
 //USING METADATA FILE FORMAT (JSON) FOR PDF DETAILS
