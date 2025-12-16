@@ -24,6 +24,35 @@
     </div>
     <script>alert("AAAAAA");</script>
     <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
-    <script>alert("BBBBBB");</script>
+    <script>
+        alert("BBBBBB");
+        let socket = null;
+        
+        document.addEventListener('DOMContentLoaded', (event) => {
+            console.log('The DOM is fully loaded and parsed');
+            socket = io('https://bogobit.org');
+            alert("CCCCCC");
+        });
+
+        socket.on('newChatMessage', (data) => {
+            alert("EEEEEE");    
+            console.log('New chat message received:', data);
+            const chatLogEntry = document.getElementById('chat-log-entry');
+            const newEntry = document.createElement('ul');
+            newEntry.textContent = data.message;
+            chatLogEntry.appendChild(newEntry);
+        });
+
+        document.getElementById('send-chat-message').addEventListener('click', () => {
+            alert("DDDDDD");
+            console.log('Sending chat message...');
+            const message = document.querySelector('input[name="chat_message"]').value;
+            socket.emit('newChatMessage', {
+                message: message
+            });
+            console.log('Chat message sent:', message);
+        });
+
+    </script>
 </body>
 </html>
