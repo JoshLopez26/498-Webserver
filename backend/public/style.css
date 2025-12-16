@@ -88,7 +88,7 @@ a, a:hover, a:after, a:hover::after
     text-decoration: none;
     font-weight: 500;
     font-size: 0.85rem;
-    background: #426172; /* match navbar */
+    background: #747d8d; /* match navbar */
     border: none;
     cursor: pointer;
     position: relative;
@@ -107,7 +107,7 @@ a, a:hover, a:after, a:hover::after
 }
 
 .current-page-button {
-    color: rgb(15, 238, 227);
+    color: #1f1f29;
     text-decoration: none;
     font-weight: 500;
     font-size: 0.85rem;
@@ -124,16 +124,17 @@ a, a:hover, a:after, a:hover::after
 	}
 
 .current-page-button:hover {
-	color: rgb(179, 255, 251);
+	color: rgb(15, 238, 227);
 	/* no translate on hover to avoid position shift */
 	box-shadow: 0 4px 10px rgba(0,0,0,0.22);
 }
 
 span.pagination-container {
     display: flex;
-    flex-wrap: nowrap;      /* Keep everything on one line */
-    align-items: center;
-    gap: 0.25rem;           /* Small spacing between items */
+    flex-wrap: nowrap;
+    align-items: center;       /* vertical alignment inside flex line */
+    justify-content: center;   /* horizontally center all children */
+    gap: 0.25rem;
 }
 
 #manual-page {
