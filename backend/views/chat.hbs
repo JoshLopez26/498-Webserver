@@ -10,19 +10,19 @@
     <h1>Chatroom</h1>
     {{> navbar}}    
     <div class="chat-logs">
-        <!-- Display old chat messages here -->
-        {{#each messages}}
-            <li>
-                <p>
-                    <strong id="message-author" style="color: #{{name_color}}">{{display_name}}</strong>
-                    <div class="list-indent">
-                        {{text}}<br>
-                        <em class="message-date">Posted on: {{created_at}}</em><br>
-                    </div>
-                </p>
-            </li>
-        {{/each}}
         <ul id="chat-log-entry">
+            <!-- Display old chat messages here -->
+            {{#each messages}}
+                <li>
+                    <p>
+                        <strong id="message-author" style="color: #{{name_color}}">{{display_name}}</strong>
+                        <div class="list-indent">
+                            {{text}}<br>
+                            <em class="message-date">Posted on: {{created_at}}</em><br>
+                        </div>
+                    </p>
+                </li>
+            {{/each}}
             <!-- Chat log entries will go here -->
         </ul>
     </div>
@@ -49,7 +49,7 @@
             // <p>
             const p = document.createElement('p');
 
-            // <strong id="comment-author" style="color: #{{name_color}}">
+            // <strong id="message-author" style="color: #{{name_color}}">
             const strong = document.createElement('strong');
             strong.id = 'message-author';
             strong.textContent = name;
@@ -59,11 +59,11 @@
             const div = document.createElement('div');
             div.className = 'list-indent';
 
-            // text
+            // Add text
             div.appendChild(document.createTextNode(text));
             div.appendChild(document.createElement('br'));
 
-            // <em class="comment-date">
+            // <em class="message-date">
             const em = document.createElement('em');
             em.className = 'message-date';
             em.textContent = `Posted on: ${created_at}`;
@@ -75,13 +75,8 @@
             p.appendChild(strong);
             p.appendChild(div);
             li.appendChild(p);
-            
+
             document.getElementById('chat-log-entry').appendChild(li);
-            /*
-            const chatLogEntry = document.getElementById('chat-log-entry');
-            const newEntry = document.createElement('li');
-            newEntry.textContent = text;
-            chatLogEntry.appendChild(newEntry);*/
         }
 
         function setupSocketHandlers() {
