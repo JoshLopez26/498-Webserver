@@ -38,12 +38,19 @@ const middleware = (session({
   saveUninitialized: false
 }));
 
-// Create Socket.IO server
+const cors = require('cors');
+
+const corsOptions = {
+    origin: ["https://bogobit.org"],
+    credentials: true
+};
+
+// For Express
+app.use(cors(corsOptions));
+
+// For Socket.IO
 const io = new Server(server, {
-    cors: {
-        origin: "*",
-        methods: ["GET", "POST"]
-    }
+    cors: corsOptions
 });
 
 app.use(middleware);
