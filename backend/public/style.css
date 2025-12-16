@@ -23,7 +23,12 @@ a, a:hover, a:after, a:hover::after
 	padding: 20px;
 }
 
-.list-indent,
+.list-indent
+{
+	margin-top: -15px;
+	margin-left: 20px;
+}
+
 .message-list-indent
 {
 	margin-top: 4px;
