@@ -75,12 +75,11 @@ io.on('connection', (socket) => {
     }
     
     // Listen for events
-    socket.on('newChatMessage', (data) => {
+    socket.on('getNewChatMessage', (data) => {
         console.log('New chat message received:', data);
-        const chatLogEntry = document.getElementById('chat-log-entry');
-        const newEntry = document.createElement('ul');
-        newEntry.textContent = data.message;
-        chatLogEntry.appendChild(newEntry);
+        socket.emit('newChatMessage', {
+            message: data.message
+        });
     });
 
     socket.on('requestData', (data) => {

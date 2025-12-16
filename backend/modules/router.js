@@ -14,37 +14,7 @@ module.exports = () => {
 
     // Home page
     router.get('/', (req, res) => {
-        // Check that required environment variables are set
-        if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
-            console.error('Error: GMAIL_USER and GMAIL_APP_PASSWORD environment variables must be set');
-            console.error('Make sure you have a .env file and run: node --env-file=.env send-email.js');
-            process.exit(1);
-        }
-        else{
-            console.log('GMAIL_USER and GMAIL_APP_PASSWORD environment variables are set.');
-        }
-
         res.render('home', { user: req.session });
-    });
-
-    router.post('/test', async (req, res) => {
-        const recipient = 'bogobitgames@gmail.com';
-        const subject = 'Test Email from Node.js';
-        const text = 'This is a test email sent from a Node.js script!';
-        
-        console.log('Sending email...');
-        console.log(`To: ${recipient}`);
-        console.log(`Subject: ${subject}`);
-        
-        const result = await sendEmail(recipient, subject, text);
-        
-        if (result.success) {
-            console.log('Email sent successfully!');
-            console.log(`Message ID: ${result.messageId}`);
-        } else {
-            console.error('Failed to send email:', result.error);
-            process.exit(1);
-        }
     });
 
     // Render Login page
@@ -192,8 +162,7 @@ module.exports = () => {
 
         if(comment && req.session && req.session.isLoggedIn)
         {
-            db.prepare('INSERT INTO comments (user_id, text) VALUES (?, ?)')
-            .run(req.session.userId, comment);
+            db.prepare('INSERT INTO comments (user_id, text) VALUES (?, ?)').run(req.session.userId, comment);
             const commentList = loadComments();
             res.render('comments', {user: req.session, comments: commentList});
         }

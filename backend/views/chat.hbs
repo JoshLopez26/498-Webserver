@@ -31,7 +31,13 @@
             if (socket)
             {
                 alert("Socket initialized");
-                
+                socket.on('newChatMessage', (data) => {
+                    alert("MESSAGE!!!!!")
+                    const chatLogEntry = document.getElementById('chat-log-entry');
+                    const newEntry = document.createElement('ul');
+                    newEntry.textContent = data.message;
+                    chatLogEntry.appendChild(newEntry);
+                });
             }
             else
             {
@@ -51,7 +57,7 @@
             alert("SENT MESSAGE");
             console.log('Sending chat message...');
             const message = document.querySelector('input[name="chat_message"]').value;
-            socket.emit('newChatMessage', {
+            socket.emit('getNewChatMessage', {
                 message: message
             });
             console.log('Chat message sent:', message);
