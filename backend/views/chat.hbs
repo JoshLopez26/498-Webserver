@@ -42,7 +42,7 @@
         function createComment(id, text, created_at, name, color)
         {
             // <li>
-            const li = document.createElement('li');
+            const li = document.getElementById('chat-log-entry').appendChild('li');
 
             // <p>
             const p = document.createElement('p');
