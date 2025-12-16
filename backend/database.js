@@ -35,7 +35,7 @@ db.exec(`
         FOREIGN KEY(user_id) REFERENCES users(id)
     );
 
-    CREATE TABLE IF NOT EXISTS chats (
+    CREATE TABLE IF NOT EXISTS messages (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id INTEGER,        
         text TEXT NOT NULL,

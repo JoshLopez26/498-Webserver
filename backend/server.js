@@ -77,11 +77,35 @@ io.on('connection', (socket) => {
     // Listen for events
     socket.on('getNewChatMessage', (data) => {
         console.log('New chat message received:', data);
-        ///////
+        
+        if(data.user)
+        {
+            const newEntry = db.prepare('INSERT INTO messages (user_id, text) VALUES (?, ?)').run(data.user, data.message);
+            const messageId = newEntry.lastInsertRowid;
+            const message = db.prepare(`
+                SELECT
+                    message.id,
+                    message.text,
+                    message.created_at,
+                    user.display_name,
+                    user.name_color
+                FROM messages
+                JOIN users ON message.user_id = user.id
+                WHERE message.id = ?
+            `).get(messageId);
+            
+            io.emit('newChatMessage', {
+                message: message
+            });
+            
 
-        io.emit('newChatMessage', {
-            message: data.message
-        });
+        }
+        else 
+        {
+            res.send("Can't submit empty comment or user not logged in.")
+        }
+
+        
     });
 
     socket.on('requestData', (data) => {

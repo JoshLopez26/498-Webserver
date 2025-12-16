@@ -6,10 +6,21 @@
     <link rel="icon" href="/images/favicon.png" type="image/x-icon">
     <title>Socket.IO with Sessions</title>
 </head>
-<body>
+<body data-user-id="{{user}}" data-messages="{{messages}}">
     <h1>Socket.IO with Session Authentication</h1>
     
     <div class="chat-logs">
+        {{#each messages}}
+            <li>
+                <p>
+                    <strong id="message-author" style="color: #{{name_color}}">{{display_name}}</strong>
+                    <div class="list-indent">
+                        {{text}}<br>
+                        <em class="message-date">Posted on: {{created_at}}</em><br>
+                    </div>
+                </p>
+            </li>
+        {{/each}}
         <ui id="chat-log-entry">
             <!-- Chat log entries will go here -->
         </ui>
@@ -24,15 +35,59 @@
     </div>
     <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
     <script>
+        const user = document.body.dataset.user;        
         let socket = null;
+
+
+        function createComment(message)
+        {
+            // <li>
+            const li = document.createElement('li');
+
+            // <p>
+            const p = document.createElement('p');
+
+            // <strong id="comment-author" style="color: #{{name_color}}">
+            const strong = document.createElement('strong');
+            strong.id = 'message-author';
+            strong.textContent = message.display_name;
+            strong.style.color = `#${message.name_color}`;
+
+            // <div class="list-indent">
+            const div = document.createElement('div');
+            div.className = 'list-indent';
+
+            // text
+            div.appendChild(document.createTextNode(message.text));
+            div.appendChild(document.createElement('br'));
+
+            // <em class="comment-date">
+            const em = document.createElement('em');
+            em.className = 'message-date';
+            em.textContent = `Posted on: ${message.created_at}`;
+
+            div.appendChild(em);
+            div.appendChild(document.createElement('br'));
+
+            // Assemble
+            p.appendChild(strong);
+            p.appendChild(div);
+            li.appendChild(p);
+
+/*
+            // Append to chat log
+            document.getElementById('chat-log-entry').appendChild(li);
+            const chatLogEntry = document.getElementById('chat-log-entry');
+            const newEntry = document.createElement('li');
+            newEntry.textContent = message.text;
+            chatLogEntry.appendChild(newEntry);*/
+        }
+
         function setupSocketHandlers() {
             if (socket)
             {
                 socket.on('newChatMessage', (data) => {
-                    const chatLogEntry = document.getElementById('chat-log-entry');
-                    const newEntry = document.createElement('li');
-                    newEntry.textContent = data.message;
-                    chatLogEntry.appendChild(newEntry);
+                    createComment(data.message);
                 });
             }
             else
@@ -54,6 +109,7 @@
             console.log('Sending chat message...');
             const message = document.querySelector('input[name="chat_message"]').value;
             socket.emit('getNewChatMessage', {
+                user: user.userId,
                 message: message
             });
             console.log('Chat message sent:', message);

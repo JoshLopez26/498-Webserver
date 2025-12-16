@@ -37,6 +37,10 @@ a, a:hover, a:after, a:hover::after
 	font-size: 15pt;
 }
 
+#message-author{
+	font-size: 15pt;
+}
+
 /* Reusable themed button (matches navbar appearance) */
 .themed-button {
     color: #ffffff;
