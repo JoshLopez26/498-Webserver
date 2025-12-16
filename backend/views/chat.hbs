@@ -34,14 +34,20 @@
             alert("CCCCCC");
         });
 
-        socket.on('newChatMessage', (data) => {
-            alert("EEEEEE");    
-            console.log('New chat message received:', data);
-            const chatLogEntry = document.getElementById('chat-log-entry');
-            const newEntry = document.createElement('ul');
-            newEntry.textContent = data.message;
-            chatLogEntry.appendChild(newEntry);
-        });
+        if (!socket) {
+            console.error('Socket.IO client is not initialized.');
+        }
+        else
+        {
+            socket.on('newChatMessage', (data) => {
+                alert("EEEEEE");    
+                console.log('New chat message received:', data);
+                const chatLogEntry = document.getElementById('chat-log-entry');
+                const newEntry = document.createElement('ul');
+                newEntry.textContent = data.message;
+                chatLogEntry.appendChild(newEntry);
+            });
+        }
 
         document.getElementById('send-chat-message').addEventListener('click', () => {
             alert("DDDDDD");
