@@ -19,9 +19,11 @@ module.exports = () => {
         if (userCount.count === 0) {
             const insertUser = db.prepare('INSERT INTO users (username, password, email, display_name, name_color) VALUES (?, ?, ?, ?, ?)');
             insertUser.run('Bogo', '#3Frfrfr', 'bogo@example.com', 'Bit', '#00FF00');
-            const id = db.prepare('SELECT (id) FROM users WHERE username = ?').get('Bogo');
+            const row = db.prepare('SELECT id FROM users WHERE username = ?').get('Bogo');
+            const userId = row.id;
+            const commentInsert = db.prepare('INSERT INTO comments (user_id, text) VALUES (?, ?)');
             for(let i = 0; i < 14; i++)
-                db.prepare('INSERT INTO comments (user_id, text) VALUES (?, ?)').run(id, i.toString());
+                commentInsert.run(userId, i.toString());
         }
         res.render('home', { user: req.session });
     });
