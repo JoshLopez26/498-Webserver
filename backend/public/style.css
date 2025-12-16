@@ -83,6 +83,6 @@ a, a:hover, a:after, a:hover::after
     margin-bottom: 10px;
 }
 
-.list-indent {
+.message-list-indent {
     margin-left: 10px;
 }

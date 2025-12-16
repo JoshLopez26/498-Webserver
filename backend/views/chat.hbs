@@ -16,7 +16,7 @@
                 <li>
                     <p>
                         <strong id="message-author" style="color: #{{name_color}}">{{display_name}}</strong>
-                        <div class="list-indent">
+                        <div class="message-list-indent">
                             {{text}}<br>
                             <em class="message-date">Posted on: {{created_at}}</em><br>
                         </div>
@@ -55,9 +55,9 @@
             strong.textContent = name;
             strong.style.color = `#${color}`;
 
-            // <div class="list-indent">
+            // <div class="message-list-indent">
             const div = document.createElement('div');
-            div.className = 'list-indent';
+            div.className = 'message-list-indent';
 
             // Add message text + <br>
             div.appendChild(document.createTextNode(text));
