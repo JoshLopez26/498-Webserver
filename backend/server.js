@@ -78,7 +78,7 @@ io.on('connection', (socket) => {
     socket.on('getNewChatMessage', (data) => {
         console.log('New chat message received:', data);
         
-        if(data.user)
+        if(data.user && data.isLoggedIn)
         {
             // Insert the new message
             const insert = db.prepare(`

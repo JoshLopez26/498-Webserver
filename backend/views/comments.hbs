@@ -9,6 +9,7 @@
     <h1>Comments</h1>
     {{> navbar}}
 
+    <p>Total Comments: {{page.totalComments}}</p>
     <!-- Display all comments in an unordered list -->
     <ul>
         {{#each comments}}
@@ -34,6 +35,47 @@
             <button class="themed-button" type="submit">Add Comment</button>
         </form>
     {{/if}}
+
+    <span>
+        <!-- Previous page -->
+        {{#if page.prevPage}}
+            <form action="/comments" method="GET">
+                <input type="hidden" name="page" value="{{page.prevPage}}">
+                <button class="themed-button" type="submit">&lt;</button>
+            </form>
+        {{/if}}
+
+        <!-- Display next five pages as quick buttons -->
+        {{#if page.index}}
+            {{#each page.index}}
+                <form action="/comments" method="GET">
+                    <input type="hidden" name="page" value="{{this}}">
+                    <button class="themed-button" type="submit">{{this}}</button>
+                </form>
+            {{/each}}
+        {{/if}}
+
+        <!-- Last Page -->
+        <form action="/comments" method="GET">
+            <input type="hidden" name="page" value="{{page.lastPage}}">
+            <button class="themed-button" type="submit">{{page.lastPage}}</button>
+        </form>
+
+        <!-- Next page -->
+        {{#if page.nextPage}}
+            <form action="/comments" method="GET">
+                <input type="hidden" name="page" value="{{page.nextPage}}">
+                <button class="themed-button" type="submit">&gt;</button>
+            </form>
+        {{/if}}
+
+        <!-- Manual page number -->
+        <form action="/comments" method="GET">
+            <input type="number" name="page" min="1" step="1" required>
+            <button class="themed-button" type="submit">Go</button>
+        </form>
+    </span>
+
     {{> footer}}
 </body>
 </html>

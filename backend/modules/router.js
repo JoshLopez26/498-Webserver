@@ -139,8 +139,46 @@ module.exports = () => {
         }
     });
 
-    function loadComments() {
-        return db.prepare('SELECT comments.text, comments.created_at, users.display_name, users.name_color FROM comments JOIN users ON comments.user_id = users.id ORDER BY comments.created_at DESC').all();
+    function loadComments(currentPage, PAGE_SIZE) {
+        const offset = (currentPage - 1) * PAGE_SIZE;
+
+        return db.prepare(`
+        SELECT
+            comments.id,
+            comments.text,
+            comments.created_at,
+            users.display_name,
+            users.name_color
+        FROM comments
+        JOIN users ON comments.user_id = users.id
+        ORDER BY comments.created_at DESC
+        LIMIT ? OFFSET ?
+        `).all(PAGE_SIZE, offset);
+    }
+
+    function renderCommentsPage(req, res) {
+        const PAGE_SIZE = 20;
+        const currentPage = Math.max(1, parseInt(req.query.page, 10) || 1);
+        const comments = loadComments(currentPage, PAGE_SIZE);
+        const totalComments = db.prepare(`SELECT COUNT(*) AS total FROM comments`).get().total;
+        const totalPages = Math.ceil(totalComments / PAGE_SIZE);
+
+        let pages = {
+            current: currentPage,
+            prevPage: currentPage > 1 ? currentPage - 1 : null,
+            nextPage: (currentPage < totalPages) ? currentPage + 1 : null,
+            totalComments: totalComments,
+            lastPage: totalPages
+        }
+        
+        const index = []
+        for(let i = 1; i <= 5; i++){
+            if (currentPage + i > totalPages) break;
+            index.push(currentPage + i);
+        }
+        if(index.length) pages.index = index;
+
+        res.render('comments', {user: req.session, comments: comments, page: pages});
     }
 
     router.get('/profile', requireAuth, (req, res) => {
@@ -149,17 +187,14 @@ module.exports = () => {
 
     // Render Comments page
     router.get('/comments', requireAuth, (req, res) => {
-        var commentList = [];
-        commentList = loadComments();
-        res.render('comments', {user: req.session, comments: commentList});
+        renderCommentsPage(req, res);
     });
 
     // Handle new comment
     router.post('/comment', requireAuth, (req, res) => {
         const comment = req.body.comment;
         db.prepare('INSERT INTO comments (user_id, text) VALUES (?, ?)').run(req.session.userId, comment);
-        const commentList = loadComments();
-        res.render('comments', {user: req.session, comments: commentList});
+        renderCommentsPage(req, res);
     });
 
     // Add comment form

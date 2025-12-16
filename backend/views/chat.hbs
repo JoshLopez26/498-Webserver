@@ -6,7 +6,7 @@
     <link rel="icon" href="/images/favicon.png" type="image/x-icon">
     <title>Bogobit</title>
 </head>
-<body data-user-id="{{user.userId}}">
+<body data-user-id="{{user.userId}}" data-is-logged-in="{{user.isLoggedIn}}">
     <h1>Chatroom</h1>
     {{> navbar}}    
     <div class="chat-logs">
@@ -37,7 +37,8 @@
     {{> footer}}
     <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
     <script>
-        const userId = document.body.dataset.userId;        
+        const userId = document.body.dataset.userId;    
+        const isLoggedIn = document.body.dataset.isLoggedIn;            
         let socket = null;
 
 
@@ -109,6 +110,7 @@
             console.log('Sending chat message...');
             const message = document.querySelector('input[name="chat_message"]').value;
             socket.emit('getNewChatMessage', {
+                isLoggedIn: isLoggedIn,
                 user: userId,
                 message: message
             });
