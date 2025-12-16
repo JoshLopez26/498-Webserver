@@ -36,7 +36,7 @@
         </form>
     {{/if}}
 
-    <span>
+    <span class="pagination-container">
         <!-- Previous page -->
         {{#if page.prevPage}}
             <form action="/comments" method="GET">
@@ -45,34 +45,40 @@
             </form>
         {{/if}}
 
+        <!-- Current Page -->
+        <form action="/comments" method="GET">
+            <input type="hidden" name="page" value="{{page.currentPage}}">
+            <button class="current-page-button" type="submit">{{page.lastPage}}</button>
+        </form>
+
         <!-- Display next five pages as quick buttons -->
         {{#if page.index}}
             {{#each page.index}}
                 <form action="/comments" method="GET">
                     <input type="hidden" name="page" value="{{this}}">
-                    <button class="themed-button" type="submit">{{this}}</button>
+                    <button class="page-button" type="submit">{{this}}</button>
                 </form>
             {{/each}}
         {{/if}}
-
+        ...
         <!-- Last Page -->
         <form action="/comments" method="GET">
             <input type="hidden" name="page" value="{{page.lastPage}}">
-            <button class="themed-button" type="submit">{{page.lastPage}}</button>
+            <button class="page-button" type="submit">{{page.lastPage}}</button>
         </form>
 
         <!-- Next page -->
         {{#if page.nextPage}}
             <form action="/comments" method="GET">
                 <input type="hidden" name="page" value="{{page.nextPage}}">
-                <button class="themed-button" type="submit">&gt;</button>
+                <button class="page-button" type="submit">&gt;</button>
             </form>
         {{/if}}
 
         <!-- Manual page number -->
         <form action="/comments" method="GET">
-            <input type="number" name="page" min="1" step="1" required>
-            <button class="themed-button" type="submit">Go</button>
+            <input type="number" id="manual-page" name="page" min="1" step="1" required>
+            <button class="page-button" type="submit">Go</button>
         </form>
     </span>
 

@@ -164,7 +164,7 @@ module.exports = () => {
         const totalPages = Math.ceil(totalComments / PAGE_SIZE);
 
         let pages = {
-            current: currentPage,
+            currentPage: currentPage,
             prevPage: currentPage > 1 ? currentPage - 1 : null,
             nextPage: (currentPage < totalPages) ? currentPage + 1 : null,
             totalComments: totalComments,
@@ -173,7 +173,7 @@ module.exports = () => {
         
         const index = []
         for(let i = 1; i <= 5; i++){
-            if (currentPage + i > totalPages) break;
+            if (currentPage + i > totalPages - 1) break;
             index.push(currentPage + i);
         }
         if(index.length) pages.index = index;

@@ -83,6 +83,67 @@ a, a:hover, a:after, a:hover::after
 	box-shadow: 0 4px 10px rgba(0,0,0,0.22);
 }
 
+.page-button {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.85rem;
+    background: #426172; /* match navbar */
+    border: none;
+    cursor: pointer;
+    position: relative;
+	padding: 0.25rem 0.6rem; /* smaller button */
+    border-radius: 0.35rem;
+    display: inline-block;
+    line-height: 1;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+    transition: transform 0.08s ease, box-shadow 0.12s ease;
+	}
+
+.page-button:hover {
+	color: rgb(15, 238, 227);
+	/* no translate on hover to avoid position shift */
+	box-shadow: 0 4px 10px rgba(0,0,0,0.22);
+}
+
+.current-page-button {
+    color: rgb(15, 238, 227);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.85rem;
+    background: #ffffff; /* match navbar */
+    border: none;
+    cursor: pointer;
+    position: relative;
+	padding: 0.25rem 0.6rem; /* smaller button */
+    border-radius: 0.35rem;
+    display: inline-block;
+    line-height: 1;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+    transition: transform 0.08s ease, box-shadow 0.12s ease;
+	}
+
+.current-page-button:hover {
+	color: rgb(179, 255, 251);
+	/* no translate on hover to avoid position shift */
+	box-shadow: 0 4px 10px rgba(0,0,0,0.22);
+}
+
+span.pagination-container {
+    display: flex;
+    flex-wrap: nowrap;      /* Keep everything on one line */
+    align-items: center;
+    gap: 0.25rem;           /* Small spacing between items */
+}
+
+#manual-page {
+    width: 3ch; /* wide enough for 3 digits */
+    padding: 0.25rem;
+    text-align: center;
+    border-radius: 0.35rem;
+    border: 1px solid #ccc;
+    font-size: 0.85rem;
+}
 .themed-form { display: inline; }
 
 .chat-logs {
