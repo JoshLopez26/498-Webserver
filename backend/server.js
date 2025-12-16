@@ -80,25 +80,39 @@ io.on('connection', (socket) => {
         
         if(data.user)
         {
-            const newEntry = db.prepare('INSERT INTO messages (user_id, text) VALUES (?, ?)').run(data.user, data.message);
-            const messageId = newEntry.lastInsertRowid;
-            const message = db.prepare(`
-                SELECT
-                    message.id,
-                    message.text,
-                    message.created_at,
-                    user.display_name,
-                    user.name_color
-                FROM messages
-                JOIN users ON message.user_id = user.id
-                WHERE message.id = ?
-            `).get(messageId);
-            
-            io.emit('newChatMessage', {
-                message: message
-            });
-            
+            // Insert the new message
+            const insert = db.prepare(`
+                INSERT INTO messages (user_id, text) VALUES (?, ?)
+            `);
+            const insertResult = insert.run(data.user, data.message);
 
+            // Get the newly inserted message
+            const select = db.prepare(`
+                SELECT 
+                    m.id,
+                    m.text,
+                    m.created_at,
+                    u.display_name,
+                    u.name_color
+                FROM messages AS m
+                JOIN users AS u ON m.user_id = u.id
+                WHERE m.id = ?
+            `);
+            const message = select.get(insertResult.lastInsertRowid);
+
+            if (!message) {
+                console.error("Failed to retrieve message after insert");
+                return;
+            }
+
+            // Emit a flattened message object to clients
+            io.emit('newChatMessage', {
+                id: message.id,
+                text: message.text,
+                created_at: message.created_at,
+                display_name: message.display_name,
+                name_color: message.name_color
+            });
         }
         else 
         {
