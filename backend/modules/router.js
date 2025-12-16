@@ -13,12 +13,13 @@ module.exports = () => {
     router.use(express.json()); // Parse JSON bodies
 
     // Home page
-    router.get('/', (req, res) => {
+    router.get('/', async (req, res) => {
         // Insert some sample data if the table is empty
         const userCount = db.prepare('SELECT COUNT(*) as count FROM users').get();
         if (userCount.count === 0) {
+            const passwordHash = await hashPassword("#3Frfrfr");
             const insertUser = db.prepare('INSERT INTO users (username, password, email, display_name, name_color) VALUES (?, ?, ?, ?, ?)');
-            insertUser.run('Bogo', '#3Frfrfr', 'bogo@example.com', 'Bit', '#00FF00');
+            insertUser.run('Bogo', passwordHash, 'bogo@example.com', 'Bit', '#00FF00');
             const row = db.prepare('SELECT id FROM users WHERE username = ?').get('Bogo');
             const userId = row.id;
             const commentInsert = db.prepare('INSERT INTO comments (user_id, text) VALUES (?, ?)');
