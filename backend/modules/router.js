@@ -14,6 +14,15 @@ module.exports = () => {
 
     // Home page
     router.get('/', (req, res) => {
+        // Insert some sample data if the table is empty
+        const userCount = db.prepare('SELECT COUNT(*) as count FROM users').get();
+        if (userCount.count === 0) {
+            const insertUser = db.prepare('INSERT INTO users (username, password, email, display_name, name_color) VALUES (?, ?, ?, ?, ?)');
+            insertUser.run('Bogo', '#3Frfrfr', 'bogo@example.com', 'Bit', '#00FF00');
+            const id = db.prepare('SELECT (id) FROM users WHERE username = ?').get('Bogo');
+            for(let i = 0; i < 14; i++)
+                db.prepare('INSERT INTO comments (user_id, text) VALUES (?, ?)').run(id, i.toString());
+        }
         res.render('home', { user: req.session });
     });
 
@@ -139,6 +148,10 @@ module.exports = () => {
         }
     });
 
+    router.get('/profile', requireAuth, (req, res) => {
+        res.render('profile', {user: req.session});
+    });
+
     function loadComments(currentPage, PAGE_SIZE) {
         const offset = (currentPage - 1) * PAGE_SIZE;
 
@@ -158,19 +171,27 @@ module.exports = () => {
 
     function renderCommentsPage(req, res) {
         const PAGE_SIZE = 3;
-        const currentPage = Math.max(1, parseInt(req.query.page, 10) || 1);
-        const comments = loadComments(currentPage, PAGE_SIZE);
         const totalComments = db.prepare(`SELECT COUNT(*) AS total FROM comments`).get().total;
         const totalPages = Math.ceil(totalComments / PAGE_SIZE);
+
+        // Catch invalid page numbers
+        const requestedPage = parseInt(req.query.page, 10) || 1;
+        const currentPage = Math.min(
+            Math.max(1, requestedPage),
+            totalPages
+        );
+
+        const comments = loadComments(currentPage, PAGE_SIZE);
+        
 
         let pages = {
             currentPage: currentPage,
             prevPage: currentPage > 1 ? currentPage - 1 : null,
             nextPage: (currentPage < totalPages) ? currentPage + 1 : null,
             totalComments: totalComments,
-            lastPage: totalPages
         }
         
+        if(currentPage !== totalPages) pages.lastPage = totalPages;
         const index = []
         for(let i = 1; i <= 5; i++){
             if (currentPage + i > totalPages - 1) break;
@@ -180,10 +201,6 @@ module.exports = () => {
 
         res.render('comments', {user: req.session, comments: comments, page: pages});
     }
-
-    router.get('/profile', requireAuth, (req, res) => {
-        res.render('profile', {user: req.session});
-    });
 
     // Render Comments page
     router.get('/comments', requireAuth, (req, res) => {
@@ -243,8 +260,7 @@ module.exports = () => {
         const passwordHash = await hashPassword(new_password);
             
         // Update password in database
-        const stmt = db.prepare('UPDATE users SET password = ? WHERE id = ?');
-        const result = stmt.run(passwordHash, req.session.userId);
+        db.prepare('UPDATE users SET password = ? WHERE id = ?').run(passwordHash, req.session.userId);
         
         req.session.destroy((err) => {
             if (err) {
@@ -299,38 +315,6 @@ module.exports = () => {
             settings.error = 'Invalid email format';
             return res.render('change-setting', settings);
         }
-/////////////// EMAIL SYSTEM TESTING //////////////////
-
-        /*
-        const subject = 'Email Change Successful';
-        const text = `Hello ${user.display_name},\n\nYour email has been successfully changed to ${new_email}.`;
-        const result = await sendEmail(new_email, subject, text);
-        if (result.success) {
-            console.log('Email sent successfully!');
-            console.log(`Message ID: ${result.messageId}`);
-        } else {
-            console.error('Failed to send email:', result.error);
-            process.exit(1);
-        }*/
-
-        /*
-        const recipient = 'bogobitgames@gmail.com';
-        const subject = 'Test Email from Node.js';
-        const text = 'This is a test email sent from a Node.js script!';
-        
-        console.log('Sending email...');
-        console.log(`To: ${recipient}`);
-        console.log(`Subject: ${subject}`);
-        
-        const result = await sendEmail(recipient, subject, text);
-        
-        if (result.success) {
-            console.log('Email sent successfully!');
-            console.log(`Message ID: ${result.messageId}`);
-        } else {
-            console.error('Failed to send email:', result.error);
-            process.exit(1);
-        }*/
 
         //Email Successfully changed
         db.prepare('UPDATE users SET email = ? WHERE id = ?').run(new_email, req.session.userId);

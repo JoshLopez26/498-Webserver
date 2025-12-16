@@ -11,13 +11,7 @@ Due: Dec 19th, 11:59pm
     comment history.
 
 2 Core Requirements
-    2.4 User Profile Page
-    Create a user profile page accessible to logged-in users with the following features:
-        2.4.1 Account Management
-            - Change Email:
-                – Send confirmation email to new address (optional but recommended)
-
-    2.5 Password Recovery System
+    2.5 Password Recovery System (OPTIONAL???)
         - Implement “Forgot Password” functionality:
             – Add a “Forgot Password” link on the login page
             – User enters their email address
@@ -36,14 +30,6 @@ Due: Dec 19th, 11:59pm
         - Email Configuration:
             – Configure email service (Gmail)
             – Document email configuration in README
-
-    2.6 Real-Time Chat System
-        - API Backend for Chat:
-            – Create REST API endpoints for chat functionality
-            – Endpoints should handle:
-                * Sending messages
-                * Retrieving chat history
-            – Authenticate API requests (verify user is logged in)
 
 2.7 Enhanced Comment System
     2.7.1 Pagination

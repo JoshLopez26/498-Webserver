@@ -137,8 +137,21 @@ span.pagination-container {
     gap: 0.25rem;
 }
 
+.comment-list {
+    margin: 10rem, 0;
+    display: flex;
+    flex-wrap: wrap;
+    height: 60vh;              /* 60% of screen (viewport) height */
+    overflow-y: auto;          /* scroll vertically if content overflows */
+    overflow-x: hidden;        /* prevent horizontal scroll */
+
+    white-space: normal;      
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
 #manual-page {
-    width: 3ch; /* wide enough for 3 digits */
+    width: 5ch; /* wide enough for 3 digits */
     padding: 0.25rem;
     text-align: center;
     border-radius: 0.35rem;

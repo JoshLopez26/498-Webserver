@@ -11,7 +11,7 @@
 
     <p>Total Comments: {{page.totalComments}}</p>
     <!-- Display all comments in an unordered list -->
-    <ul>
+    <ul class="comment-list">
         {{#each comments}}
             <li>
                 <p>
@@ -48,7 +48,7 @@
         <!-- Current Page -->
         <form action="/comments" method="GET">
             <input type="hidden" name="page" value="{{page.currentPage}}">
-            <button class="current-page-button" type="submit">{{page.lastPage}}</button>
+            <button class="current-page-button" type="submit">{{page.currentPage}}</button>
         </form>
 
         <!-- Display next five pages as quick buttons -->
@@ -62,23 +62,25 @@
         {{/if}}
         ...
         <!-- Last Page -->
-        <form action="/comments" method="GET">
-            <input type="hidden" name="page" value="{{page.lastPage}}">
-            <button class="page-button" type="submit">{{page.lastPage}}</button>
-        </form>
+        {{#if page.nextPage}}
+            <form action="/comments" method="GET">
+                <input type="hidden" name="page" value="{{page.lastPage}}">
+                <button class="page-button" type="submit">{{page.lastPage}}</button>
+            </form>
+        {{/if}}
 
         <!-- Next page -->
         {{#if page.nextPage}}
             <form action="/comments" method="GET">
                 <input type="hidden" name="page" value="{{page.nextPage}}">
-                <button class="page-button" type="submit">&gt;</button>
+                <button class="themed-button" type="submit">&gt;</button>
             </form>
         {{/if}}
         &nbsp;&nbsp;&nbsp;
         <!-- Manual page number -->
         <form action="/comments" method="GET">
             <input type="number" id="manual-page" name="page" min="1" step="1" required>
-            <button class="page-button" type="submit">Go</button>
+            <button class="themed-button" type="submit">Go</button>
         </form>
     </span>
 
