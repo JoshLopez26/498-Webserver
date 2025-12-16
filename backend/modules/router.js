@@ -376,7 +376,7 @@ module.exports = () => {
     });
 
     router.get('/chat', requireAuth, (req, res) => {
-        const messageList = db.prepare('SELECT messages.text, messages.created_at, users.display_name, users.name_color FROM messages JOIN users ON messages.user_id = users.id ORDER BY messages.created_at DESC').all();
+        const messageList = db.prepare('SELECT messages.text, messages.created_at, users.display_name, users.name_color FROM messages JOIN users ON messages.user_id = users.id ORDER BY messages.created_at ASC').all();
         res.render('chat', {user: req.session, messages: messageList});
     });
 

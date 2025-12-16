@@ -43,40 +43,44 @@
 
         function createComment(id, text, created_at, name, color)
         {
-            // <li>
+            // Create <li>
             const li = document.createElement('li');
 
-            // <p>
+            // Create <p>
             const p = document.createElement('p');
 
-            // <strong id="message-author" style="color: #{{name_color}}">
+            // <strong id="message-author" style="color: #...">
             const strong = document.createElement('strong');
             strong.id = 'message-author';
-            strong.textContent = name;
-            strong.style.color = `#${color}`;
+            strong.textContent = display_name;
+            strong.style.color = `#${name_color}`;
 
             // <div class="list-indent">
             const div = document.createElement('div');
             div.className = 'list-indent';
 
-            // Add text
+            // Add message text + <br>
             div.appendChild(document.createTextNode(text));
             div.appendChild(document.createElement('br'));
 
-            // <em class="message-date">
+            // <em class="message-date">Posted on: ...</em>
             const em = document.createElement('em');
             em.className = 'message-date';
             em.textContent = `Posted on: ${created_at}`;
-
             div.appendChild(em);
             div.appendChild(document.createElement('br'));
 
-            // Assemble
+            // Assemble <p> and <li>
             p.appendChild(strong);
             p.appendChild(div);
             li.appendChild(p);
 
-            document.getElementById('chat-log-entry').appendChild(li);
+            // Append to the chat log <ul>
+            const chatLog = document.getElementById('chat-log-entry');
+            chatLog.appendChild(li);
+
+            // Auto-scroll to bottom
+            chatLog.scrollTop = chatLog.scrollHeight;
         }
 
         function setupSocketHandlers() {

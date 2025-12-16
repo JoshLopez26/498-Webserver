@@ -79,7 +79,7 @@ a, a:hover, a:after, a:hover::after
 }
 
 /* Optional: make each message easier to read */
-.chat-logs li {
+#chat-log-entry li {
     margin-bottom: 10px;
 }
 
