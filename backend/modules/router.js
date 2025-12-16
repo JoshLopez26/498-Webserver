@@ -143,37 +143,27 @@ module.exports = () => {
         return db.prepare('SELECT comments.text, comments.created_at, users.display_name, users.name_color FROM comments JOIN users ON comments.user_id = users.id ORDER BY comments.created_at DESC').all();
     }
 
-    router.get('/profile', (req, res) => {
+    router.get('/profile', requireAuth, (req, res) => {
         res.render('profile', {user: req.session});
     });
 
     // Render Comments page
-    router.get('/comments', (req, res) => {
+    router.get('/comments', requireAuth, (req, res) => {
         var commentList = [];
-        if(req.session && req.session.isLoggedIn){
-            commentList = loadComments();
-        }
+        commentList = loadComments();
         res.render('comments', {user: req.session, comments: commentList});
     });
 
     // Handle new comment
-    router.post('/comment', (req, res) => {
+    router.post('/comment', requireAuth, (req, res) => {
         const comment = req.body.comment;
-
-        if(comment && req.session && req.session.isLoggedIn)
-        {
-            db.prepare('INSERT INTO comments (user_id, text) VALUES (?, ?)').run(req.session.userId, comment);
-            const commentList = loadComments();
-            res.render('comments', {user: req.session, comments: commentList});
-        }
-        else
-        {
-            return res.send("Can't submit empty comment or user not logged in.");
-        }
+        db.prepare('INSERT INTO comments (user_id, text) VALUES (?, ?)').run(req.session.userId, comment);
+        const commentList = loadComments();
+        res.render('comments', {user: req.session, comments: commentList});
     });
 
     // Add comment form
-    router.get('/comment/new', (req, res) => {
+    router.get('/comment/new', requireAuth, (req, res) => {
         res.render('comment/new');
     });
 

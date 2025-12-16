@@ -116,10 +116,8 @@ io.on('connection', (socket) => {
         }
         else 
         {
-            res.send("Can't submit empty comment or user not logged in.")
+            console.error("Can't submit empty comment or user not logged in.")
         }
-
-        
     });
 
     socket.on('requestData', (data) => {

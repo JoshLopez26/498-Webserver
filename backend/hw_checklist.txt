@@ -38,18 +38,11 @@ Due: Dec 19th, 11:59pm
             – Document email configuration in README
 
     2.6 Real-Time Chat System
-        - Implement an active chat area using Socket.io:
-            – Create a dedicated chat page or section
-            – Use Socket.io for real-time bidirectional communication
-            – Display chat messages in real-time to all connected users
-            – Show user display names and profile customizations in chat
-            – Include timestamps for chat messages
         - API Backend for Chat:
             – Create REST API endpoints for chat functionality
             – Endpoints should handle:
                 * Sending messages
                 * Retrieving chat history
-            – Store chat messages in the database
             – Authenticate API requests (verify user is logged in)
 
 2.7 Enhanced Comment System
