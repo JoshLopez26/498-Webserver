@@ -63,6 +63,7 @@ io.on('connection', (socket) => {
     const userId = session.userId;
     const username = session.username;
     const isLoggedIn = session.isLoggedIn;
+    alert("CONNECT");
     
     console.log('Client connected:', socket.id);
     console.log('User:', username, 'ID:', userId);
@@ -75,6 +76,15 @@ io.on('connection', (socket) => {
     }
     
     // Listen for events
+    socket.on('newChatMessage', (data) => {
+        alert("CHAT EMIT RECIEVED!");    
+        console.log('New chat message received:', data);
+        const chatLogEntry = document.getElementById('chat-log-entry');
+        const newEntry = document.createElement('ul');
+        newEntry.textContent = data.message;
+        chatLogEntry.appendChild(newEntry);
+    });
+
     socket.on('requestData', (data) => {
         socket.emit('response', {
             success: true,

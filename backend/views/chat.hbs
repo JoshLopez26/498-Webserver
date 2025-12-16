@@ -31,14 +31,7 @@
             if (socket)
             {
                 alert("Socket initialized");
-                socket.on('newChatMessage', (data) => {
-                    alert("CHAT EMIT RECIEVED!");    
-                    console.log('New chat message received:', data);
-                    const chatLogEntry = document.getElementById('chat-log-entry');
-                    const newEntry = document.createElement('ul');
-                    newEntry.textContent = data.message;
-                    chatLogEntry.appendChild(newEntry);
-                });
+                
             }
             else
             {
