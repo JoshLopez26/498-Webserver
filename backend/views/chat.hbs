@@ -7,9 +7,10 @@
     <title>Socket.IO with Sessions</title>
 </head>
 <body data-user-id="{{user.userId}}">
-    <h1>Socket.IO with Session Authentication</h1>
-    
+    <h1>Chatroom</h1>
+    {{> navbar}}    
     <div class="chat-logs">
+        <!-- Display old chat messages here on initialize -->
         {{#each messages}}
             <li>
                 <p>
@@ -22,7 +23,7 @@
             </li>
         {{/each}}
         <ul id="chat-log-entry">
-            <!-- Chat log entries will go here -->
+            <!-- New chat log entries will go here -->
         </ul>
     </div>
 
@@ -33,6 +34,7 @@
         <input type="text" name="chat_message" required>
         <button class="themed-button" id="send-chat-message" type="button">Send</button>
     </div>
+    {{> footer}}
     <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
     <script>
         const userId = document.body.dataset.userId;        
@@ -41,7 +43,6 @@
 
         function createComment(id, text, created_at, name, color)
         {
-            /*
             // <li>
             const li = document.getElementById('chat-log-entry').appendChild('li');
 
@@ -73,12 +74,14 @@
             // Assemble
             p.appendChild(strong);
             p.appendChild(div);
-            li.appendChild(p);*/
+            li.appendChild(p);
             
+            document.getElementById('chat-log-entry').appendChild(li);
+            /*
             const chatLogEntry = document.getElementById('chat-log-entry');
             const newEntry = document.createElement('li');
             newEntry.textContent = text;
-            chatLogEntry.appendChild(newEntry);
+            chatLogEntry.appendChild(newEntry);*/
         }
 
         function setupSocketHandlers() {

@@ -33,6 +33,10 @@ a, a:hover, a:after, a:hover::after
 	color: rgb(203, 203, 226)
 }
 
+.message-date{
+	color: rgb(203, 203, 226)
+}
+
 #comment-author{
 	font-size: 15pt;
 }
@@ -66,3 +70,22 @@ a, a:hover, a:after, a:hover::after
 }
 
 .themed-form { display: inline; }
+
+.chat-logs {
+    max-height: 400px;       /* set the maximum height of the chat area */
+    overflow-y: auto;        /* enable vertical scrolling when content exceeds max-height */
+    overflow-x: hidden;      /* hide horizontal scroll */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+}
+
+/* Optional: make each message easier to read */
+.chat-logs li {
+    margin-bottom: 10px;
+}
+
+.list-indent {
+    margin-left: 10px;
+}
