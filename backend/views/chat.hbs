@@ -6,7 +6,7 @@
     <link rel="icon" href="/images/favicon.png" type="image/x-icon">
     <title>Socket.IO with Sessions</title>
 </head>
-<body data-user-id="{{user}}">
+<body data-user-id="{{user.userId}}">
     <h1>Socket.IO with Session Authentication</h1>
     
     <div class="chat-logs">
@@ -21,9 +21,9 @@
                 </p>
             </li>
         {{/each}}
-        <ui id="chat-log-entry">
+        <ul id="chat-log-entry">
             <!-- Chat log entries will go here -->
-        </ui>
+        </ul>
     </div>
 
     <div>
@@ -35,7 +35,7 @@
     </div>
     <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
     <script>
-        const user = document.body.dataset.user;        
+        const userId = document.body.dataset.userId;        
         let socket = null;
 
 
@@ -108,7 +108,7 @@
             console.log('Sending chat message...');
             const message = document.querySelector('input[name="chat_message"]').value;
             socket.emit('getNewChatMessage', {
-                user: user.userId,
+                user: userId,
                 message: message
             });
             console.log('Chat message sent:', message);
