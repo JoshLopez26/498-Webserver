@@ -10,9 +10,9 @@
     <h1>Socket.IO with Session Authentication</h1>
     
     <div class="chat-logs">
-        <li id="chat-log-entry">
+        <ui id="chat-log-entry">
             <!-- Chat log entries will go here -->
-        </li>
+        </ui>
     </div>
 
     <div>
@@ -24,17 +24,13 @@
     </div>
     <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
     <script>
-        alert("BBBBBB");
         let socket = null;
-        
         function setupSocketHandlers() {
             if (socket)
             {
-                alert("Socket initialized");
                 socket.on('newChatMessage', (data) => {
-                    alert("MESSAGE!!!!!")
                     const chatLogEntry = document.getElementById('chat-log-entry');
-                    const newEntry = document.createElement('ul');
+                    const newEntry = document.createElement('li');
                     newEntry.textContent = data.message;
                     chatLogEntry.appendChild(newEntry);
                 });
@@ -48,13 +44,13 @@
 
         document.addEventListener('DOMContentLoaded', (event) => {
             console.log('The DOM is fully loaded and parsed');
-            socket = io('https://bogobit.org');
-            alert("CCCCCC");
+            socket = io('https://bogobit.org', {
+                withCredentials: true
+            });
             setupSocketHandlers();
         });
 
         document.getElementById('send-chat-message').addEventListener('click', () => {
-            alert("SENT MESSAGE");
             console.log('Sending chat message...');
             const message = document.querySelector('input[name="chat_message"]').value;
             socket.emit('getNewChatMessage', {

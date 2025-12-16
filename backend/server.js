@@ -77,7 +77,9 @@ io.on('connection', (socket) => {
     // Listen for events
     socket.on('getNewChatMessage', (data) => {
         console.log('New chat message received:', data);
-        socket.emit('newChatMessage', {
+        ///////
+
+        io.emit('newChatMessage', {
             message: data.message
         });
     });
