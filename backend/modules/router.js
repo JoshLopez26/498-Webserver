@@ -157,7 +157,7 @@ module.exports = () => {
     }
 
     function renderCommentsPage(req, res) {
-        const PAGE_SIZE = 20;
+        const PAGE_SIZE = 3;
         const currentPage = Math.max(1, parseInt(req.query.page, 10) || 1);
         const comments = loadComments(currentPage, PAGE_SIZE);
         const totalComments = db.prepare(`SELECT COUNT(*) AS total FROM comments`).get().total;
