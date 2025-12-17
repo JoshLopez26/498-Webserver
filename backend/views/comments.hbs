@@ -27,11 +27,11 @@
 
     <!-- If user is logged in, add comment form, else send to login -->
     {{#if user.isLoggedIn}}
-        <form class="themed-form" action="/comment/new" method="GET">
+        <form class="themed-form" id="add-comment" action="/comment/new" method="GET">
             <button class="themed-button" type="submit">Add Comment</button>
         </form>
     {{else}}
-        <form class="themed-form" action="/login" method="GET">
+        <form class="themed-form" id="add-comment" action="/login" method="GET">
             <button class="themed-button" type="submit">Add Comment</button>
         </form>
     {{/if}}
@@ -60,9 +60,10 @@
                 </form>
             {{/each}}
         {{/if}}
-        ...
+        
         <!-- Last Page -->
-        {{#if page.nextPage}}
+        {{#if page.lastPage}}
+            ...
             <form action="/comments" method="GET">
                 <input type="hidden" name="page" value="{{page.lastPage}}">
                 <button class="page-button" type="submit">{{page.lastPage}}</button>
