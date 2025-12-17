@@ -13,7 +13,7 @@
     <!-- Display all comments in an unordered list -->
     <ul class="comment-list">
         {{#each comments}}
-            <li id="comment-entry" data-comment-id="{{id}}" data-user-vote="{{points}}">
+            <li id="comment-entry" data-comment-id="{{id}}" data-user-vote="{{user_vote}}">
                 <p>
                     <strong id="comment-author" style="color: #{{name_color}}">{{display_name}}</strong>
                     <div class="list-indent">
@@ -93,19 +93,16 @@
 
     {{> footer}}
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            // Find all comment entries
-            document.querySelectorAll('#comment-entry').forEach(comment => {
-                const point = parseInt(comment.dataset.points);
-                const upvoteButton = comment.querySelector('button[points="1"]');
-                const downvoteButton = comment.querySelector('button[points="-1"]');
+        document.querySelectorAll('#comment-entry').forEach(comment => {
+            const vote = parseInt(comment.dataset.userVote);
+            const upvoteButton = comment.querySelector('button[data-vote="1"]');
+            const downvoteButton = comment.querySelector('button[data-vote="-1"]');
 
-                if (point === 1) {
-                    upvoteButton.classList.add('voted');
-                } else if (point === -1) {
-                    downvoteButton.classList.add('voted');
-                }
-            });
+            if (point === 1) {
+                upvoteButton.classList.add('voted');
+            } else if (point === -1) {
+                downvoteButton.classList.add('voted');
+            }
         });
 
         const PAGE_SIZE = 20;
