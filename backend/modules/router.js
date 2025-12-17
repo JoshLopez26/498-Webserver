@@ -239,6 +239,12 @@ module.exports = () => {
         const { commentId, vote } = req.body;
         const userId = req.session.userId;
 
+        //Error catching
+        console.log('userId:', req.session.userID);
+        if (!commentId || !vote) {
+            return res.status(400).send('Missing commentId or vote');
+        }
+
         //Check for existing vote
         const oldVote = db.prepare(`
             SELECT vote
