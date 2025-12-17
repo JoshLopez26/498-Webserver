@@ -13,7 +13,7 @@
     <!-- Display all comments in an unordered list -->
     <ul class="comment-list">
         {{#each comments}}
-            <li>
+            <li id="comment-entry">
                 <p>
                     <strong id="comment-author" style="color: #{{name_color}}">{{display_name}}</strong>
                     <div class="list-indent">
@@ -89,14 +89,14 @@
         const PAGE_SIZE = 20;
         const totalComments = document.body.dataset.totalComments;  
         const currentPage = document.body.dataset.currentPage;  
-        const lowerPageBound = PAGE_SIZE * currentPage - 1;
+        const lowerPageBound = Math.max(0, PAGE_SIZE * (currentPage - 1));
         const upperPageBound = (lowerPageBound + PAGE_SIZE > totalComments) ? totalComments : lowerPageBound + PAGE_SIZE;
 
         
         const lastPage = document.body.dataset.lastPage;
 
         const commentInfo = document.getElementById('comment-info');
-        commentInfo.textContent = `Comments ${lowerPageBound}-${upperPageBound} of ${totalComments}`
+        commentInfo.textContent = `Comments: ${lowerPageBound}-${upperPageBound} of ${totalComments}`
     </script>
 </body>
 </html>

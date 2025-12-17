@@ -23,7 +23,7 @@ module.exports = () => {
             const row = db.prepare('SELECT id FROM users WHERE username = ?').get('Bogo');
             const userId = row.id;
             const commentInsert = db.prepare('INSERT INTO comments (user_id, text) VALUES (?, ?)');
-            for(let i = 0; i < 14; i++)
+            for(let i = 0; i < 99; i++)
                 commentInsert.run(userId, i.toString());
         }
         res.render('home', { user: req.session });
@@ -173,7 +173,7 @@ module.exports = () => {
     }
 
     function renderCommentsPage(req, res) {
-        const PAGE_SIZE = 3;
+        const PAGE_SIZE = 20;
         const totalComments = db.prepare(`SELECT COUNT(*) AS total FROM comments`).get().total;
         const totalPages = Math.ceil(totalComments / PAGE_SIZE);
 

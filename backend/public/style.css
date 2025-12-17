@@ -138,16 +138,35 @@ span.pagination-container {
 }
 
 .comment-list {
-    margin: 10rem 0;   /* ← also fixed your comma bug */
+    margin: 0;
+    padding: 1rem;
+
     display: flex;
-    flex-direction: column;   /* 🔑 stack vertically */
+    flex-direction: column;
+
     height: 60vh;
+    min-height: 0;       /* 🔑 enables scrolling */
     overflow-y: auto;
     overflow-x: hidden;
 
     white-space: normal;
     overflow-wrap: break-word;
     word-break: break-word;
+}
+
+#comment-entry {
+    width: 100%;                 /* 🔑 span across container */
+    box-sizing: border-box;      /* padding doesn’t affect width */
+
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+
+    background: #ffffff;
+    border-radius: 12px;         /* rounded corners */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+
+    white-space: normal;
+    overflow-wrap: break-word;
 }
 
 #manual-page {
