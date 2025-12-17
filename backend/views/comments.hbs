@@ -13,7 +13,7 @@
     <!-- Display all comments in an unordered list -->
     <ul class="comment-list">
         {{#each comments}}
-            <li id="comment-entry" data-comment-id="{{id}}">
+            <li id="comment-entry" data-comment-id="{{id}}" data-user-vote="{{points}}">
                 <p>
                     <strong id="comment-author" style="color: #{{name_color}}">{{display_name}}</strong>
                     <div class="list-indent">
@@ -21,8 +21,8 @@
                         <em class="comment-date">Posted on: {{created_at}}</em><br>
                         <!-- Voting -->
                         <form class="comment-votes" action="/comment/vote" method="POST">
-                            <button class="themed-button" data-vote="1" style="{{#if (eq user_vote 1)}}color: #1f1f29; background: #ffffff;{{/if}}" type="submit">▲</button>
-                            <button class="themed-button" data-vote="-1" style="{{#if (eq user_vote -1)}}color: #1f1f29; background: #ffffff;{{/if}}" type="submit">▼</button>
+                            <button class="themed-button" data-vote="1" type="submit">▲</button>
+                            <button class="themed-button" data-vote="-1" type="submit">▼</button>
                             <span class="comment-date">&nbsp;Points:&nbsp;{{points}}</span>
                         </form>
                     </div>
@@ -93,6 +93,21 @@
 
     {{> footer}}
     <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Find all comment entries
+            document.querySelectorAll('#comment-entry').forEach(comment => {
+                const point = parseInt(comment.dataset.points);
+                const upvoteButton = comment.querySelector('button[points="1"]');
+                const downvoteButton = comment.querySelector('button[points="-1"]');
+
+                if (point === 1) {
+                    upvoteButton.classList.add('voted');
+                } else if (point === -1) {
+                    downvoteButton.classList.add('voted');
+                }
+            });
+        });
+
         const PAGE_SIZE = 20;
         const totalComments = parseInt(document.body.dataset.totalComments, 10) || 0;
         const currentPage = parseInt(document.body.dataset.currentPage, 10) || 1;
