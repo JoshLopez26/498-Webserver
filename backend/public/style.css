@@ -160,7 +160,7 @@ span.pagination-container {
     justify-content: center;
 }
 
-#comment-entry {
+.comment-entry {
     list-style: none;
     width: 100%;                 /* 🔑 span across container */
     box-sizing: border-box;      /* padding doesn’t affect width */

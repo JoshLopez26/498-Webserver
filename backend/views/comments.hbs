@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="/style.css">
     <link rel="icon" href="/images/favicon.png" type="image/x-icon">
 </head>
-<body data-total-comments="{{page.totalComments}}" data-current-page="{{data.currentPage}}">
+<body data-total-comments="{{page.totalComments}}" data-current-page="{{page.currentPage}}">
     <h1>Comments</h1>
     {{> navbar}}
 
@@ -13,7 +13,7 @@
     <!-- Display all comments in an unordered list -->
     <ul class="comment-list">
         {{#each comments}}
-            <li id="comment-entry" data-comment-id="{{id}}" data-user-vote="{{user_vote}}">
+            <li class="comment-entry" data-comment-id="{{id}}" data-user-vote="{{user_vote}}">
                 <p>
                     <strong id="comment-author" style="color: #{{name_color}}">{{display_name}}</strong>
                     <div class="list-indent">
@@ -105,9 +105,9 @@
             const upvoteButton = comment.querySelector('button[data-vote="1"]');
             const downvoteButton = comment.querySelector('button[data-vote="-1"]');
 
-            if (point === 1) {
+            if (vote === 1) {
                 upvoteButton.classList.add('voted');
-            } else if (point === -1) {
+            } else if (vote === -1) {
                 downvoteButton.classList.add('voted');
             }
         });
@@ -116,9 +116,9 @@
         const totalComments = parseInt(document.body.dataset.totalComments, 10) || 0;
         const currentPage = parseInt(document.body.dataset.currentPage, 10) || 1;
 
-        const lowerCommentBound = (currentPage - 1) * PAGE_SIZE;
-        let upperCommentBound = currentPage * PAGE_SIZE - 1;
-        if (upperCommentBound >= totalComments) upperCommentBound = totalComments - 1;
+        const lowerCommentBound = (currentPage - 1) * PAGE_SIZE + 1;
+        let upperCommentBound = currentPage * PAGE_SIZE;
+        if (upperCommentBound > totalComments) upperCommentBound = totalComments;
 
         const commentInfo = document.getElementById("comment-info");
         commentInfo.textContent = `Comments: ${lowerCommentBound}-${upperCommentBound} of ${totalComments}`;
