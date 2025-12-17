@@ -155,7 +155,7 @@ module.exports = () => {
         res.render('profile', {user: req.session});
     });
 
-    function loadComments(currentPage, PAGE_SIZE) {
+    function loadComments(userId, currentPage, PAGE_SIZE) {
         const offset = (currentPage - 1) * PAGE_SIZE;
 
         /*
@@ -187,7 +187,7 @@ module.exports = () => {
         GROUP BY comments.id
         ORDER BY comments.created_at DESC
         LIMIT ? OFFSET ?`
-        ).all(PAGE_SIZE, offset);
+        ).all(userId, PAGE_SIZE, offset);
     }
 
     function renderCommentsPage(req, res) {
@@ -202,7 +202,7 @@ module.exports = () => {
             totalPages
         );
 
-        const comments = loadComments(currentPage, PAGE_SIZE);
+        const comments = loadComments(req.session.userId, currentPage, PAGE_SIZE);
         
 
         let pages = {
