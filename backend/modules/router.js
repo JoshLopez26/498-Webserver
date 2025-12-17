@@ -240,7 +240,7 @@ module.exports = () => {
         const userId = req.session.userId;
 
         //Error catching
-        console.log('userId:', req.session.userID);
+        console.log('userId:', req.session.userId);
         if (!commentId || !vote) {
             return res.status(400).send('Missing commentId or vote');
         }
