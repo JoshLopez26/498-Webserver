@@ -20,11 +20,18 @@
                         {{text}}<br>
                         <em class="comment-date">Posted on: {{created_at}}</em><br>
                         <!-- Voting -->
-                        <form class="comment-votes" action="/comment/vote" method="POST">
-                            <button class="themed-button" data-vote="1" type="submit">▲</button>
-                            <button class="themed-button" data-vote="-1" type="submit">▼</button>
-                            <span class="comment-date">&nbsp;Points:&nbsp;{{points}}</span>
+                        <form action="/comment/vote" method="POST">
+                            <input type="hidden" name="commentId" value="{{id}}">
+                            <input type="hidden" name="vote" value="1">
+                            <button type="submit">▲</button>
                         </form>
+
+                        <form action="/comment/vote" method="POST">
+                            <input type="hidden" name="commentId" value="{{id}}">
+                            <input type="hidden" name="vote" value="-1">
+                            <button type="submit">▼</button>
+                        </form>
+                        <span class="comment-date">&nbsp;Points:&nbsp;{{points}}</span>
                     </div>
                 </p>
             </li>
