@@ -13,12 +13,18 @@
     <!-- Display all comments in an unordered list -->
     <ul class="comment-list">
         {{#each comments}}
-            <li id="comment-entry">
+            <li id="comment-entry" data-comment-id="{{id}}">
                 <p>
                     <strong id="comment-author" style="color: #{{name_color}}">{{display_name}}</strong>
                     <div class="list-indent">
                         {{text}}<br>
                         <em class="comment-date">Posted on: {{created_at}}</em><br>
+                        <!-- Voting -->
+                        <form class="comment-votes" action="/comment/vote" method="POST">
+                            <button data-vote="1" type="submit">▲</button>
+                            <span>{{votes}}</span>
+                            <button data-vote="-1" type="submit">▼</button>
+                        </form>
                     </div>
                 </p>
             </li>
@@ -88,13 +94,13 @@
     {{> footer}}
     <script>
         const PAGE_SIZE = 20;
-        const totalComments = Number(document.body.dataset.totalComments) || 0;  
-        const currentPage = Number(document.body.dataset.currentPage) || 1;  
-        const lowerPageBound = Math.max(0, PAGE_SIZE * (currentPage - 1));
-        const upperPageBound = (lowerPageBound + PAGE_SIZE > totalComments) ? totalComments : lowerPageBound + PAGE_SIZE;
+        const totalComments = Number(document.body.dataset.totalComments);  
+        const currentPage = Number(document.body.dataset.currentPage);  
+        const lowerCommentBound = PAGE_SIZE * (currentPage - 1);
+        const upperCommentBound = (lowerCommentBound + PAGE_SIZE > totalComments) ? totalComments : lowerCommentBound + PAGE_SIZE;
 
         const commentInfo = document.getElementById('comment-info');
-        commentInfo.textContent = `Comments: ${lowerPageBound}-${upperPageBound} of ${totalComments}`
+        commentInfo.textContent = `Comments: ${lowerCommentBound}-${upperCommentBound} of ${totalComments}`;
     </script>
 </body>
 </html>

@@ -34,15 +34,7 @@ Due: Dec 19th, 11:59pm
 2.7 Enhanced Comment System
     2.7.1 Pagination
         - Implement page-based comment history:
-            – Display a limited number of comments per page (e.g., 20-50 comments)
-            – Use GET parameters to specify which page to display (e.g., /comments?page=2)
-            – Include pagination controls (Previous, Next, page numbers)
             – Show total number of comments and current page information
-            – Handle edge cases (invalid page numbers, empty pages)
-        - Efficient Database Queries:
-            – Use LIMIT and OFFSET in SQL queries
-            – Optimize queries to avoid loading all comments into memory
-            – Display comments in reverse chronological order (newest first)
     2.7.2 User-Friendly and Security Features
     Implement at least one of the following features:
         1. Comment Compression/Truncation:

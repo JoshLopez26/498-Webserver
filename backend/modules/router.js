@@ -158,6 +158,7 @@ module.exports = () => {
     function loadComments(currentPage, PAGE_SIZE) {
         const offset = (currentPage - 1) * PAGE_SIZE;
 
+        /*
         return db.prepare(`
         SELECT
             comments.id,
@@ -169,7 +170,24 @@ module.exports = () => {
         JOIN users ON comments.user_id = users.id
         ORDER BY comments.created_at DESC
         LIMIT ? OFFSET ?
-        `).all(PAGE_SIZE, offset);
+        `).all(PAGE_SIZE, offset);*/
+
+        return db.prepare(`
+        SELECT
+            comments.id,
+            comments.text,
+            comments.created_at,
+            users.display_name,
+            users.name_color,
+            COALESCE(SUM(comment_votes.vote), 0) AS score,
+            MAX(CASE WHEN comment_votes.user_id = ? THEN comment_votes.vote END) AS user_vote
+        FROM comments
+        LEFT JOIN comment_votes ON comment_votes.comment_id = comments.id
+        JOIN users ON comments.user_id = users.id
+        GROUP BY comments.id
+        ORDER BY comments.created_at DESC
+        LIMIT ? OFFSET ?`
+        ).all(PAGE_SIZE, offset);
     }
 
     function renderCommentsPage(req, res) {
@@ -214,6 +232,35 @@ module.exports = () => {
     router.post('/comment', requireAuth, (req, res) => {
         const comment = req.body.comment;
         db.prepare('INSERT INTO comments (user_id, text) VALUES (?, ?)').run(req.session.userId, comment);
+        renderCommentsPage(req, res);
+    });
+
+    router.post('/comment/vote', requireAuth, (req, res) => {
+        const { commentId, vote } = req.body;
+        const userId = req.session.userID;
+
+        //Check for existing vote
+        const oldVote = db.prepare(`
+            SELECT vote
+            FROM comment_votes
+            WHERE user_id = ? AND comment_id = ?
+        `).get(userId, commentId);
+        if(!oldVote) return renderCommentsPage(req, res);
+        
+        //If vote exists, override old vote
+        if (oldVote.vote === vote) { // Same vote, remove
+            db.prepare(`
+                DELETE FROM comment_votes
+                WHERE user_id = ? AND comment_id = ?
+            `).run(userId, commentId);
+        } else { // different vote, override
+            db.prepare(`
+                INSERT INTO comment_votes (user_id, comment_id, vote)
+                VALUES (?, ?, ?)
+                ON CONFLICT(user_id, comment_id)
+                DO UPDATE SET vote = excluded.vote
+            `).run(userId, commentId, vote);
+        }
         renderCommentsPage(req, res);
     });
 

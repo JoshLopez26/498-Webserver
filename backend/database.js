@@ -51,6 +51,17 @@ db.exec(`
         success INTEGER DEFAULT 0
     );
 
+    CREATE TABLE IF NOT EXISTS comment_votes (
+        user_id INTEGER NOT NULL,
+        comment_id INTEGER NOT NULL,
+        vote INTEGER NOT NULL,
+
+        PRIMARY KEY (user_id, comment_id),
+
+        FOREIGN KEY (user_id) REFERENCES users(id),
+        FOREIGN KEY (comment_id) REFERENCES comments(id)
+    );
+
     CREATE INDEX IF NOT EXISTS idx_login_attempts_ip_username 
     ON login_attempts(ip_address, username, attempt_time);
 `);
