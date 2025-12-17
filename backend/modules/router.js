@@ -179,7 +179,7 @@ module.exports = () => {
             comments.created_at,
             users.display_name,
             users.name_color,
-            COALESCE(SUM(comment_votes.vote), 0) AS score,
+            COALESCE(SUM(comment_votes.vote), 0) AS points,
             MAX(CASE WHEN comment_votes.user_id = ? THEN comment_votes.vote END) AS user_vote
         FROM comments
         LEFT JOIN comment_votes ON comment_votes.comment_id = comments.id

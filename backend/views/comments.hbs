@@ -21,9 +21,9 @@
                         <em class="comment-date">Posted on: {{created_at}}</em><br>
                         <!-- Voting -->
                         <form class="comment-votes" action="/comment/vote" method="POST">
-                            <button data-vote="1" type="submit">▲</button>
-                            <span>{{votes}}</span>
-                            <button data-vote="-1" type="submit">▼</button>
+                            <button class="themed-button" data-vote="1" type="submit">▲</button>
+                            <button class="themed-button" data-vote="-1" type="submit">▼</button>
+                            <span class="comment-date">&nbsp;Points:&nbsp;{{points}}</span>
                         </form>
                     </div>
                 </p>
@@ -94,12 +94,14 @@
     {{> footer}}
     <script>
         const PAGE_SIZE = 20;
-        const totalComments = Number(document.body.dataset.totalComments);  
-        const currentPage = Number(document.body.dataset.currentPage);  
-        const lowerCommentBound = PAGE_SIZE * (currentPage - 1);
-        const upperCommentBound = (lowerCommentBound + PAGE_SIZE > totalComments) ? totalComments : lowerCommentBound + PAGE_SIZE;
+        const totalComments = parseInt(document.body.dataset.totalComments, 10) || 0;
+        const currentPage = parseInt(document.body.dataset.currentPage, 10) || 1;
 
-        const commentInfo = document.getElementById('comment-info');
+        const lowerCommentBound = (currentPage - 1) * PAGE_SIZE;
+        let upperCommentBound = currentPage * PAGE_SIZE - 1;
+        if (upperCommentBound >= totalComments) upperCommentBound = totalComments - 1;
+
+        const commentInfo = document.getElementById("comment-info");
         commentInfo.textContent = `Comments: ${lowerCommentBound}-${upperCommentBound} of ${totalComments}`;
     </script>
 </body>
