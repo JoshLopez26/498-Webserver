@@ -237,7 +237,7 @@ module.exports = () => {
 
     router.post('/comment/vote', requireAuth, (req, res) => {
         const { commentId, vote } = req.body;
-        const userId = req.session.userID;
+        const userId = req.session.userId;
 
         //Check for existing vote
         const oldVote = db.prepare(`
