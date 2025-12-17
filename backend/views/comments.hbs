@@ -102,6 +102,22 @@
 
     {{> footer}}
     <script>
+        // Before navigating away (form submit)
+        document.querySelectorAll('form.vote-form').forEach(form => {
+            form.addEventListener('submit', () => {
+            localStorage.setItem('scrollPos', window.scrollY);
+            });
+        });
+
+        // On page load, restore scroll
+        window.addEventListener('load', () => {
+            const scrollPos = localStorage.getItem('scrollPos');
+            if (scrollPos) {
+            window.scrollTo(0, parseInt(scrollPos, 10));
+            localStorage.removeItem('scrollPos');
+            }
+        });
+
         document.querySelectorAll('.comment-entry').forEach(comment => {
             const vote = parseInt(comment.dataset.userVote) || 0;
             const upvoteButton = comment.querySelector('button[data-vote="1"]');
