@@ -5,11 +5,11 @@
     <link rel="stylesheet" href="/style.css">
     <link rel="icon" href="/images/favicon.png" type="image/x-icon">
 </head>
-<body>
+<body data-total-comments="{{page.totalComments}}" data-current-page="{{data.currentPage}}" data-last-page="{{data.lastPage}}">
     <h1>Comments</h1>
     {{> navbar}}
 
-    <p>Total Comments: {{page.totalComments}}</p>
+    <p id="comment-info"></p>
     <!-- Display all comments in an unordered list -->
     <ul class="comment-list">
         {{#each comments}}
@@ -85,6 +85,19 @@
     </span>
 
     {{> footer}}
+    <script>
+        const PAGE_SIZE = 20;
+        const totalComments = document.body.dataset.totalComments;  
+        const currentPage = document.body.dataset.currentPage;  
+        const lowerPageBound = PAGE_SIZE * currentPage - 1;
+        const upperPageBound = (lowerPageBound + PAGE_SIZE > totalComments) ? totalComments : lowerPageBound + PAGE_SIZE;
+
+        
+        const lastPage = document.body.dataset.lastPage;
+
+        const commentInfo = document.getElementById('comment-info');
+        commentInfo.textContent = `Comments ${lowerPageBound}-${upperPageBound} of ${totalComments}`
+    </script>
 </body>
 </html>
 

@@ -138,14 +138,14 @@ span.pagination-container {
 }
 
 .comment-list {
-    margin: 10rem, 0;
+    margin: 10rem 0;   /* ← also fixed your comma bug */
     display: flex;
-    flex-wrap: wrap;
-    height: 60vh;              /* 60% of screen (viewport) height */
-    overflow-y: auto;          /* scroll vertically if content overflows */
-    overflow-x: hidden;        /* prevent horizontal scroll */
+    flex-direction: column;   /* 🔑 stack vertically */
+    height: 60vh;
+    overflow-y: auto;
+    overflow-x: hidden;
 
-    white-space: normal;      
+    white-space: normal;
     overflow-wrap: break-word;
     word-break: break-word;
 }
