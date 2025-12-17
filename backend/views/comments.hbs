@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="/style.css">
     <link rel="icon" href="/images/favicon.png" type="image/x-icon">
 </head>
-<body data-total-comments="{{page.totalComments}}" data-current-page="{{data.currentPage}}" data-last-page="{{data.lastPage}}">
+<body data-total-comments="{{page.totalComments}}" data-current-page="{{data.currentPage}}">
     <h1>Comments</h1>
     {{> navbar}}
 
@@ -35,7 +35,7 @@
             <button class="themed-button" type="submit">Add Comment</button>
         </form>
     {{/if}}
-
+    <br>
     <span class="pagination-container">
         <!-- Previous page -->
         {{#if page.prevPage}}
@@ -88,13 +88,10 @@
     {{> footer}}
     <script>
         const PAGE_SIZE = 20;
-        const totalComments = document.body.dataset.totalComments;  
-        const currentPage = document.body.dataset.currentPage;  
+        const totalComments = Number(document.body.dataset.totalComments) || 0;  
+        const currentPage = Number(document.body.dataset.currentPage) || 1;  
         const lowerPageBound = Math.max(0, PAGE_SIZE * (currentPage - 1));
         const upperPageBound = (lowerPageBound + PAGE_SIZE > totalComments) ? totalComments : lowerPageBound + PAGE_SIZE;
-
-        
-        const lastPage = document.body.dataset.lastPage;
 
         const commentInfo = document.getElementById('comment-info');
         commentInfo.textContent = `Comments: ${lowerPageBound}-${upperPageBound} of ${totalComments}`
