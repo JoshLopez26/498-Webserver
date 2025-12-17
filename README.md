@@ -14,46 +14,11 @@ Database schema ----------------------------------------------------------------
   - messages: id, user_id, text, created_at
   - login_attempts: id, ip_address, username, attempt_time, success
   - comment_votes: user_id, comment_id, vote
-- 
-    
-    
-    CREATE TABLE IF NOT EXISTS comments (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER,        
-        text TEXT NOT NULL,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY(user_id) REFERENCES users(id)
-    );
+- votes are linked via comment_id and user_id
+- passwords are hashed
+- Data is NOT saved when docker is taken down
+- Data is filtered through SQL and JS scripting
 
-    CREATE TABLE IF NOT EXISTS messages (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER,        
-        text TEXT NOT NULL,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY(user_id) REFERENCES users(id)
-    );
-    
-    CREATE TABLE IF NOT EXISTS login_attempts (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        ip_address TEXT NOT NULL,
-        username TEXT NOT NULL,
-        attempt_time DATETIME DEFAULT CURRENT_TIMESTAMP,
-        success INTEGER DEFAULT 0
-    );
-
-    CREATE TABLE IF NOT EXISTS comment_votes (
-        user_id INTEGER NOT NULL,
-        comment_id INTEGER NOT NULL,
-        vote INTEGER NOT NULL,
-
-        PRIMARY KEY (user_id, comment_id),
-
-        FOREIGN KEY (user_id) REFERENCES users(id),
-        FOREIGN KEY (comment_id) REFERENCES comments(id)
-    );
-
-    CREATE INDEX IF NOT EXISTS idx_login_attempts_ip_username 
-    ON login_attempts(ip_address, username, attempt_time);
 
 Security ------------------------------------------------------------------------------------
 
