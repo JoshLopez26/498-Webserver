@@ -21,8 +21,8 @@
                         <em class="comment-date">Posted on: {{created_at}}</em><br>
                         <!-- Voting -->
                         <form class="comment-votes" action="/comment/vote" method="POST">
-                            <button class="themed-button" data-vote="1" type="submit">▲</button>
-                            <button class="themed-button" data-vote="-1" type="submit">▼</button>
+                            <button class="themed-button" data-vote="1" style="{{#if (eq user_vote 1)}}color: #1f1f29; background: #ffffff;{{/if}}" type="submit">▲</button>
+                            <button class="themed-button" data-vote="-1" style="{{#if (eq user_vote -1)}}color: #1f1f29; background: #ffffff;{{/if}}" type="submit">▼</button>
                             <span class="comment-date">&nbsp;Points:&nbsp;{{points}}</span>
                         </form>
                     </div>

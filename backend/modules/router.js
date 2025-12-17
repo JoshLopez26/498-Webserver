@@ -245,10 +245,9 @@ module.exports = () => {
             FROM comment_votes
             WHERE user_id = ? AND comment_id = ?
         `).get(userId, commentId);
-        if(!oldVote) return renderCommentsPage(req, res);
-        
+                
         //If vote exists, override old vote
-        if (oldVote.vote === vote) { // Same vote, remove
+        if (oldVote && oldVote.vote === vote) { // Same vote, remove
             db.prepare(`
                 DELETE FROM comment_votes
                 WHERE user_id = ? AND comment_id = ?
