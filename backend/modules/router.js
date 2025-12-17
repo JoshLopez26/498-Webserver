@@ -158,20 +158,6 @@ module.exports = () => {
     function loadComments(userId, currentPage, PAGE_SIZE) {
         const offset = (currentPage - 1) * PAGE_SIZE;
 
-        /*
-        return db.prepare(`
-        SELECT
-            comments.id,
-            comments.text,
-            comments.created_at,
-            users.display_name,
-            users.name_color
-        FROM comments
-        JOIN users ON comments.user_id = users.id
-        ORDER BY comments.created_at DESC
-        LIMIT ? OFFSET ?
-        `).all(PAGE_SIZE, offset);*/
-
         return db.prepare(`
         SELECT
             comments.id,
@@ -244,7 +230,7 @@ module.exports = () => {
         if (!commentId || !vote) {
             return res.status(400).send('Missing commentId or vote');
         }
-
+        
         //Check for existing vote
         const oldVote = db.prepare(`
             SELECT vote
@@ -253,7 +239,8 @@ module.exports = () => {
         `).get(userId, commentId);
                 
         //If vote exists, override old vote
-        if (oldVote && oldVote.vote === vote) { // Same vote, remove
+        const voteInt = parseInt(vote, 10);
+        if (oldVote && oldVote.vote === voteInt) { // Same vote, remove
             db.prepare(`
                 DELETE FROM comment_votes
                 WHERE user_id = ? AND comment_id = ?
