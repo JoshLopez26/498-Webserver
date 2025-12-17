@@ -31,43 +31,6 @@ Due: Dec 19th, 11:59pm
             – Configure email service (Gmail)
             – Document email configuration in README
 
-2.7 Enhanced Comment System
-    2.7.1 Pagination
-        - Implement page-based comment history:
-            – Show total number of comments and current page information
-    2.7.2 User-Friendly and Security Features
-    Implement at least one of the following features:
-        1. Comment Compression/Truncation:
-            - Handle comments that are too large
-            - Implement truncation with “Read More” functionality
-            - Or implement client-side compression before sending
-            - Set reasonable maximum comment length
-        2. Markdown Support:
-            - Allow markdown formatting in comments
-            - Parse and render markdown safely (prevent XSS)
-            - Support common markdown features (bold, italic, links, code blocks)
-            - Sanitize markdown output to prevent security vulnerabilities
-        3. User Comment History:
-            - Allow clicking on a user’s name/avatar to view their profile
-            - Display all comments made by that user
-            - Implement pagination for user comment history
-            - Show user’s profile customization on their profile page
-        4. Edit and Delete Own Comments:
-            - Allow users to edit their own comments
-            - Show edit history or “edited” indicator
-            - Validate that users can only edit their own comments
-            - Update comment timestamp or show edit timestamp
-        5. Comment Reactions/Voting:
-            - Allow users to upvote/downvote comments
-            - Store reactions in database
-            - Display reaction counts
-            - Prevent users from voting multiple times on same comment
-        6. Comment Threading/Replies:
-            - Allow users to reply to specific comments
-            - Display replies in a threaded format
-            - Store parent-child relationships in database
-            - Implement nested comment display
-
 3 Testing Requirements
 You must demonstrate that your system works correctly with:
     - User registration with email and display name
