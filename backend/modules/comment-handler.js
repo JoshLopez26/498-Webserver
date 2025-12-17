@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const db = require('../db');
+const db = require('../database');
 const { requireAuth } = require('./auth-middleware');
 
 function loadComments(userId, currentPage, PAGE_SIZE) {
