@@ -20,18 +20,20 @@
                         {{text}}<br>
                         <em class="comment-date">Posted on: {{created_at}}</em><br>
                         <!-- Voting -->
-                        <form action="/comment/vote" method="POST">
-                            <input type="hidden" name="commentId" value="{{id}}">
-                            <input type="hidden" name="vote" value="1">
-                            <button type="submit">▲</button>
-                        </form>
+                        <div class="comment-vote-container">
+                            <form action="/comment/vote" method="POST">
+                                <input type="hidden" name="commentId" value="{{id}}">
+                                <input type="hidden" name="vote" value="1">
+                                <button type="submit">▲</button>
+                            </form>
 
-                        <form action="/comment/vote" method="POST">
-                            <input type="hidden" name="commentId" value="{{id}}">
-                            <input type="hidden" name="vote" value="-1">
-                            <button type="submit">▼</button>
-                        </form>
-                        <span class="comment-date">&nbsp;Points:&nbsp;{{points}}</span>
+                            <form action="/comment/vote" method="POST">
+                                <input type="hidden" name="commentId" value="{{id}}">
+                                <input type="hidden" name="vote" value="-1">
+                                <button type="submit">▼</button>
+                            </form>
+                            <span class="comment-date">&nbsp;Points:&nbsp;{{points}}</span>
+                        </div>
                     </div>
                 </p>
             </li>
@@ -61,7 +63,7 @@
         <!-- Current Page -->
         <form action="/comments" method="GET">
             <input type="hidden" name="page" value="{{page.currentPage}}">
-            <button class="current-page-button" type="submit">{{page.currentPage}}</button>
+            <button class="selected-themed-button" type="submit">{{page.currentPage}}</button>
         </form>
 
         <!-- Display next five pages as quick buttons -->
@@ -106,9 +108,11 @@
             const downvoteButton = comment.querySelector('button[data-vote="-1"]');
 
             if (vote === 1) {
-                upvoteButton.classList.add('voted');
+                upvoteButton.classList.add('selected-themed-button');
+                downvoteButton.classList.add(`themed-button`)
             } else if (vote === -1) {
-                downvoteButton.classList.add('voted');
+                downvoteButton.classList.add('selected-themed-button');
+                upvoteButton.classList.add(`themed-button`)
             }
         });
 
@@ -116,12 +120,16 @@
         const totalComments = parseInt(document.body.dataset.totalComments, 10) || 0;
         const currentPage = parseInt(document.body.dataset.currentPage, 10) || 1;
 
-        const lowerCommentBound = (currentPage - 1) * PAGE_SIZE + 1;
-        let upperCommentBound = currentPage * PAGE_SIZE;
-        if (upperCommentBound > totalComments) upperCommentBound = totalComments;
-
         const commentInfo = document.getElementById("comment-info");
-        commentInfo.textContent = `Comments: ${lowerCommentBound}-${upperCommentBound} of ${totalComments}`;
+        if (totalComments === 0) {
+            commentInfo.textContent = "No comments yet.";
+        } else {
+            const lowerCommentBound = (currentPage - 1) * PAGE_SIZE + 1;
+            let upperCommentBound = currentPage * PAGE_SIZE;
+            if (upperCommentBound > totalComments) upperCommentBound = totalComments;
+
+            commentInfo.textContent = `Comments: ${lowerCommentBound}-${upperCommentBound} of ${totalComments}`;
+        }
     </script>
 </body>
 </html>
