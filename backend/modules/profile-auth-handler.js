@@ -8,6 +8,13 @@ const { validatePassword, hashPassword, comparePassword } = require('./password-
 const loginTracker = require('./login-tracker');
 const { requireAuth, checkLoginLockout, getClientIP } = require('./auth-middleware');
 
+// Test if name format is valid
+function isValidName(name) {
+    const pattern = /^[A-Za-z0-9_]+$/;
+    if (!pattern.test(name)) return false;
+    return true;
+}
+
 // Render Login page
 router.get('/login', (req, res) => {
     res.render('login', {
@@ -29,6 +36,9 @@ router.post('/login', checkLoginLockout, async (req, res) => {
             return res.redirect('/login?error=' + encodeURIComponent('Missing username or password'));
         }
         
+        // Check if username format is valid
+        if(!isValidName(username)) return res.redirect(`/login?error=` + encodeURIComponent('Invalid username, must be alphanumeric characters or underscores only'));
+
         // Find user by username
         const user = db.prepare('SELECT * FROM users WHERE username = ?').get(username);
         
@@ -79,11 +89,24 @@ router.post('/register', async (req, res) => {
         req.body.email = req.body.email.toLowerCase();
         const { username, password, email, display } = req.body;
         
-        // Validate input
+        // Check for missing fields
         if (!username || !password || !email || !display) {
             return res.redirect('/register?error=' + encodeURIComponent('Missing one or more input fields'));
         }
+
+        // Check if username format is valid
+        if(!isValidName(username)) return res.redirect(`/register?error=` + encodeURIComponent('Invalid username, must be alphanumeric characters or underscores only'));
         
+        //Check if email format is valid
+        //https://www.geeksforgeeks.org/javascript/javascript-program-to-validate-an-email-address/
+        const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!pattern.test(email)) {
+            return res.redirect('/register?error=' + encodeURIComponent('Invalid email format'));
+        }
+
+        // Check if display name format is valid
+        if(!isValidName(display)) return res.redirect(`/register?error=` + encodeURIComponent('Invalid display name, must be alphanumeric characters or underscores only'));
+
         // Validate password requirements
         const validation = validatePassword(password);
         if (!validation.valid) {
@@ -102,13 +125,7 @@ router.post('/register', async (req, res) => {
         if (existingEmail) {
             return res.redirect('/register?error=' + encodeURIComponent('Email already in use'));
         }
-        
-        //https://www.geeksforgeeks.org/javascript/javascript-program-to-validate-an-email-address/
-        const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!pattern.test(email)) {
-            return res.redirect('/register?error=' + encodeURIComponent('Invalid email format'));
-        }
-
+    
         // Check if display name already exists
         const existingDisplay = db.prepare('SELECT id FROM users WHERE display_name = ?').get(display);
         if (existingDisplay) {
@@ -119,8 +136,7 @@ router.post('/register', async (req, res) => {
         const passwordHash = await hashPassword(password);
         
         // Insert new user into database
-        const stmt = db.prepare('INSERT INTO users (username, password, email, display_name) VALUES (?, ?, ?, ?)');
-        const result = stmt.run(username, passwordHash, email, display);
+        db.prepare('INSERT INTO users (username, password, email, display_name) VALUES (?, ?, ?, ?)').run(username, passwordHash, email, display);
         
         // Redirect to login page
         res.redirect(`/login`);        

@@ -1,3 +1,7 @@
+// Goes unused due to error connecting to gmail from nodemailer
+// Email handler
+
+
 // config/email.js
 const nodemailer = require('nodemailer');
 

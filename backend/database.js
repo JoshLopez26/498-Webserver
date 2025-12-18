@@ -1,9 +1,18 @@
+// Main SQlite3 database
+
+const fs = require('fs');
 const Database = require('better-sqlite3');
 const path = require('path');
 
 // Connect to database file
-const dbPath = path.join(__dirname, 'myapp.db');
+const dbPath = process.env.SQLITE_DB_PATH || path.join(__dirname, 'data', 'myapp.db');
 const db = new Database(dbPath);
+
+// Create database directory if it does not exist
+const dir = path.dirname(dbPath);
+if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+}
 
 db.pragma('foreign_keys = ON');
 

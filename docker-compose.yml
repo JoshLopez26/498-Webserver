@@ -7,8 +7,10 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3000
+      - SQLITE_DB_PATH=/data/myapp.db
     volumes:
       - ./backend/.env:/app/.env:ro
+      - sqlite_data:/data
     networks:
       - app-network
 

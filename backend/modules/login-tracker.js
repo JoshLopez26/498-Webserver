@@ -1,3 +1,5 @@
+// Check login activity and handle lockouts for multiple failed attempts
+
 // modules/login-tracker.js
 const db = require('../database');
 

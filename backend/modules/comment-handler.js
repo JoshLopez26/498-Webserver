@@ -1,9 +1,12 @@
+// Handles all routing and all input / output for the comments database
+
 const express = require('express');
 const router = express.Router();
 
 const db = require('../database');
 const { requireAuth } = require('./auth-middleware');
 
+// Helper function to load all the comments from the database in a page (20 comments per page)
 function loadComments(userId, currentPage, PAGE_SIZE) {
     const offset = (currentPage - 1) * PAGE_SIZE;
 
@@ -25,6 +28,7 @@ function loadComments(userId, currentPage, PAGE_SIZE) {
     ).all(userId, PAGE_SIZE, offset);
 }
 
+// Helper function to render the comments from loadComments() onto the page
 function renderCommentsPage(req, res) {
     const PAGE_SIZE = 20;
     const totalComments = db.prepare(`SELECT COUNT(*) AS total FROM comments`).get().total;
@@ -39,7 +43,7 @@ function renderCommentsPage(req, res) {
 
     const comments = loadComments(req.session.userId, currentPage, PAGE_SIZE);
     
-
+    // Setup variables to pass to comments page
     let pages = {
         currentPage: currentPage,
         prevPage: currentPage > 1 ? currentPage - 1 : null,
@@ -47,6 +51,7 @@ function renderCommentsPage(req, res) {
         totalComments: totalComments,
     }
     
+    // Setup data for buttons of the next 5 pages (if they exist)
     if(currentPage !== totalPages) pages.lastPage = totalPages;
     const index = []
     for(let i = 1; i <= 5; i++){
@@ -70,17 +75,17 @@ router.post('/comment', requireAuth, (req, res) => {
     renderCommentsPage(req, res);
 });
 
+// Add or remove points based on vote to a comment
 router.post('/comment/vote', requireAuth, (req, res) => {
     const { commentId, vote } = req.body;
     const userId = req.session.userId;
 
-    //Error catching
-    console.log('userId:', req.session.userId);
+    // Check for invalid data
     if (!commentId || !vote) {
         return res.status(400).send('Missing commentId or vote');
     }
     
-    //Check for existing vote
+    // Check for existing vote
     const oldVote = db.prepare(`
         SELECT vote
         FROM comment_votes
@@ -105,7 +110,7 @@ router.post('/comment/vote', requireAuth, (req, res) => {
     renderCommentsPage(req, res);
 });
 
-// Add comment form
+// Render add comment form
 router.get('/comment/new', requireAuth, (req, res) => {
     res.render('comment/new');
 });

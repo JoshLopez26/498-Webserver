@@ -1,3 +1,5 @@
+// Handle common server-side middleware such as login authentication
+
 // modules/auth-middleware.js
 const loginTracker = require('./login-tracker');
 

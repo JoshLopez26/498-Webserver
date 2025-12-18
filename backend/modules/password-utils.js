@@ -1,3 +1,5 @@
+// Password checker helper functions
+
 // modules/password-utils.js
 const argon2 = require('argon2');
 

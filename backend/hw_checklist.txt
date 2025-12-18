@@ -33,25 +33,8 @@ Due: Dec 19th, 11:59pm
 
 3 Testing Requirements
 You must demonstrate that your system works correctly with:
-    - User registration with email and display name
     - Login with account lockout after failed attempts
-    - Password hashing and verification
-    - Profile page functionality (change password, email, display name, customization)
-    - Password recovery via email
-    - Real-time chat functionality
-    - Comment pagination
-    - At least three additional comment features
-    - HTTPS connection
     - Database persistence (data survives container restarts)
-
-4 Code Quality Requirements
-    - Include comprehensive comments explaining security measures
-    - Organize code into logical modules/files
-    - Handle edge cases appropriately (expired tokens, locked accounts, etc.)
-    - Provide clear error messages for users
-    - Ensure code is readable and well-structured
-    - Use consistent coding style
-    - Implement proper error handling and logging
 
 5 Documentation Requirements
 You must provide:

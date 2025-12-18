@@ -1,3 +1,5 @@
+// Helper functions for SQL data management
+
 // sqlite-session-store.js
 const { Store } = require('express-session');
 const Database = require('better-sqlite3');

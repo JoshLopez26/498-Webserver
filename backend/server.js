@@ -1,3 +1,5 @@
+// The main hub for the entire webpage
+
 const express = require('express');
 const session = require('express-session');
 const SQLiteStore = require('./sqlite-session-store');
@@ -25,12 +27,13 @@ hbs.registerPartials(path.join(__dirname, 'views/partials'));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(__dirname + '/public'));
 
-
+// Initialize session
 const sessionStore = new SQLiteStore({
   db: path.join(__dirname, 'sessions.db'),
   table: 'sessions'
 });
 
+// Set up middleware
 const middleware = (session({
   store: sessionStore,
   secret: 'Ns789ySN&*Ysb7YN*AY&NSNywn7ynd&*YDB*&E',
@@ -38,6 +41,7 @@ const middleware = (session({
   saveUninitialized: false
 }));
 
+// Set up socket.io for live chat
 const cors = require('cors');
 
 const corsOptions = {

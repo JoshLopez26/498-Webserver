@@ -1,3 +1,5 @@
+// Read and display in list format all available pdfs for reader to view
+
 const express = require('express');
 const validateRouter = require('./validate-pdf');
 const router = express.Router();
@@ -6,6 +8,7 @@ const router = express.Router();
 const fs = require('fs');
 const path = require('path');
 
+// Find all pdfs in /pdfs along with json data
 router.get('/', (req, res) => {
     const pdfsDir = path.join(__dirname, '..', 'pdfs');
     fs.readdir(pdfsDir, (err, files) => {
