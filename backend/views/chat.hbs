@@ -41,13 +41,10 @@
         const isLoggedIn = document.body.dataset.isLoggedIn;            
         let socket = null;
 
-
+        // On socket.on, create a comment client-side
         function createComment(id, text, created_at, name, color)
         {
-            // Create <li>
             const li = document.createElement('li');
-
-            // Create <p>
             const p = document.createElement('p');
 
             // <strong id="message-author" style="color: #...">
@@ -80,13 +77,15 @@
             const chatLog = document.getElementById('chat-log-entry');
             chatLog.appendChild(li);
 
-            // Auto-scroll to bottom
+            // Auto-scroll to bottom (Doesn't work)
             chatLog.scrollTop = chatLog.scrollHeight;
         }
 
+        // Initialize socket.on listeners
         function setupSocketHandlers() {
             if (socket)
             {
+                // Read server-side chat update
                 socket.on('newChatMessage', (data) => {
                     createComment(data.id, data.text, data.created_at, data.display_name, data.name_color);
                 });
@@ -98,6 +97,7 @@
             }
         }
 
+        // Initialize sockets on page loaded
         document.addEventListener('DOMContentLoaded', (event) => {
             console.log('The DOM is fully loaded and parsed');
             socket = io('https://bogobit.org', {
@@ -106,14 +106,19 @@
             setupSocketHandlers();
         });
 
+        // Socket.emit chat message to server to insert into database
         document.getElementById('send-chat-message').addEventListener('click', () => {
             console.log('Sending chat message...');
-            const message = document.querySelector('input[name="chat_message"]').value;
-            socket.emit('getNewChatMessage', {
+            const input = document.querySelector('input[name="chat_message"]');
+            const message = input.value; // Returns string of input
+            socket.emit('getNewChatMessage', { // Send data to server
                 isLoggedIn: isLoggedIn,
                 user: userId,
                 message: message
             });
+            input.value = '';
+            input.focus();
+
             console.log('Chat message sent:', message);
         });
     </script>

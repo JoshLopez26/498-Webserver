@@ -1,4 +1,5 @@
 // Handles all routing and all input / output for the comments database
+// Takes data as strings to prevent XSS
 
 const express = require('express');
 const router = express.Router();

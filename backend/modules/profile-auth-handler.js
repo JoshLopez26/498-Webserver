@@ -9,6 +9,7 @@ const loginTracker = require('./login-tracker');
 const { requireAuth, checkLoginLockout, getClientIP } = require('./auth-middleware');
 
 // Test if name format is valid
+// Helps with preventing XSS
 function isValidName(name) {
     const pattern = /^[A-Za-z0-9_]+$/;
     if (!pattern.test(name)) return false;

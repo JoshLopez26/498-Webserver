@@ -52,6 +52,11 @@ const corsOptions = {
 // For Express
 app.use(cors(corsOptions));
 
+// Socket.io implementation
+// All server-side socket.io is handled in server.js for simplisity as it was extremely complicated and may break on move
+// This is likely not the best practice but is was the best I could do with the time
+// Client-side code is in chat.hbs in a script tag (also for time)
+
 // For Socket.IO
 const io = new Server(server, {
     cors: corsOptions
@@ -78,19 +83,21 @@ io.on('connection', (socket) => {
         return;
     }
     
-    // Listen for events
+    // Listen for chat message from client then insert into database
+    // Afterwards, update all users chat with a io.emit to each client
     socket.on('getNewChatMessage', (data) => {
         console.log('New chat message received:', data);
         
+        // Check if user exists and is logged in
         if(data.user && data.isLoggedIn)
         {
-            // Insert the new message
+            // Insert the new message into database
             const insert = db.prepare(`
                 INSERT INTO messages (user_id, text) VALUES (?, ?)
             `);
             const insertResult = insert.run(data.user, data.message);
 
-            // Get the newly inserted message
+            // Get the newly inserted message for html styling
             const select = db.prepare(`
                 SELECT 
                     m.id,
@@ -109,7 +116,7 @@ io.on('connection', (socket) => {
                 return;
             }
 
-            // Emit a flattened message object to clients
+            //Send new message to all clients
             io.emit('newChatMessage', {
                 id: message.id,
                 text: message.text,

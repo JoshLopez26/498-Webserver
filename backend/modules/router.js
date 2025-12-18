@@ -1,4 +1,6 @@
 // Main router for all Bogobit pages
+// All router scripts should be in a dedicated router directory but for time and complexity of the project they were not
+// Some other router pages have helper functions that should also have their own scripts
 
 const express = require('express');
 const db = require('../database');
@@ -11,7 +13,7 @@ module.exports = () => {
     router.use(express.json()); // Parse JSON bodies
 
     // Render home page
-    router.get('/', async (req, res) => {
+    router.get('/', (req, res) => {
         res.render('home', { user: req.session });
     });
 
