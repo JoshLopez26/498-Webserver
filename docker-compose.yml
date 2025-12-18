@@ -29,6 +29,9 @@ services:
     networks:
       - app-network
 
+volumes:
+  sqlite_data:
+
 networks:
   app-network:
     driver: bridge
