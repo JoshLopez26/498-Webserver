@@ -9,8 +9,8 @@ services:
       - PORT=3000
       - SQLITE_DB_PATH=/data/myapp.db
     volumes:
-      - ./backend/.env:/app/.env:ro
       - sqlite_data:/data
+      - ./backend/.env:/app/.env:ro
     networks:
       - app-network
 
